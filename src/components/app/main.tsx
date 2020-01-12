@@ -10,6 +10,7 @@ import Dashboard from 'pages/experts/dashboard.page';
 
 const Main: WrappedComponent = () => {
     const [ error, updateError ] = useGlobalState("error");
+    const [ success, updateSuccess ] = useGlobalState("success");
     const [ , update ] = useGlobalState('results');
     let location = useLocation()
 
@@ -25,6 +26,12 @@ const Main: WrappedComponent = () => {
                 <Toaster position={Position.TOP}>
                     {/* "Toasted!" will appear here after clicking button. */}
                     <Toast message={error} intent={Intent.DANGER} onDismiss={() => updateError(null)}/>
+                </Toaster>
+            )}
+            { success && (
+                <Toaster position={Position.TOP}>
+                    {/* "Toasted!" will appear here after clicking button. */}
+                    <Toast message={success} intent={Intent.SUCCESS} onDismiss={() => updateSuccess(null)}/>
                 </Toaster>
             )}
             <Route exact path="/" component={Home} />

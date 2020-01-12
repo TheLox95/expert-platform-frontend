@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { wrapper } from "state";
-import { Tabs, Tab, Card, Classes } from "@blueprintjs/core";
+import { Tabs, Tab, Card, Classes, EditableText, Button, Intent } from "@blueprintjs/core";
 import Offerings from "./offerings"
 import Info from "./info"
 import Opinions from "./opinions"
@@ -13,10 +13,14 @@ const getOpinions = (http) => http({ method: 'get', url: `http://localhost:1337/
 
 const Profile = (prop) => {
     const { http, useGlobalState } = prop;
-    const [tab, updateTab] = useState("Info");
-    const [user, updateUser] = useState(null);
     const [ currentUser ] = useGlobalState('user');
-
+    const [ , updateSuccess ] = useGlobalState('success');
+    
+    const [ tab, updateTab ] = useState("Info");
+    const [ user, updateUser ] = useState(null);
+    const [ isEditing, updateIsEditing ] = useState(false);
+    const [ username, updateUsername ] = useState("");
+    const [ aboutme, updateAboutme ] = useState("");
 
     useEffect(() => {
         axios.all([
@@ -35,9 +39,17 @@ const Profile = (prop) => {
                 ...user,
                 offerings
             }
+            updateUsername(user.username)
+            updateAboutme(user.aboutme)
             updateUser(user)
         }))
     }, [currentUser.id, http]);
+
+    const update = (id) => () =>{
+        const data = { username, aboutme }
+        http({ method: 'put', url: `http://localhost:1337/users/${id}`, data })
+        .then(() => {updateIsEditing(false); updateSuccess('Information updated!')});
+    }
 
     return ( user !== null && user.role.type !== 'expert') ? <Redirect to="/" /> : (
         <>
@@ -46,9 +58,18 @@ const Profile = (prop) => {
                 <img src="http://lorempixel.com/200/200/" alt=""/>
             </div>
             <div style={{ marginLeft: '1rem'}}>
-                <h2>{user ? user.username.charAt(0).toUpperCase() + user.username.slice(1): ''}</h2>
-                <p>{user?.aboutme}</p>
+                <h2>
+                    {user === null ? null: (
+                        <EditableText onChange={(v) => {updateIsEditing(true);updateUsername(v)}} defaultValue={user.username.charAt(0).toUpperCase() + user.username.slice(1)} />
+                    )}
+                </h2>
+                <p>
+                    {user === null ? null: (
+                        <EditableText onChange={(v) => {updateIsEditing(true);updateAboutme(v)}} multiline={true} defaultValue={user.aboutme} />
+                    )}
+                </p>
             </div>
+            {isEditing ? <Button intent={Intent.PRIMARY} onClick={update(user.id)} style={{ marginLeft: 'auto', alignSelf: 'start'}} text="Update"/> : null}
         </Card>
         <Card style={{ height: 'auto' }}>
             <Tabs
