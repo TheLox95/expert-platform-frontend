@@ -1,25 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
+import { GlobalStateProvider, useGlobalState } from "./state";
+import { Overlay, Spinner } from "@blueprintjs/core";
+import Header from './components/app/header';
+import Main from './components/app/main';
+import Footer from './components/app/footer';
 import './App.css';
 
-const App: React.FC = () => {
+import { BrowserRouter as Router } from "react-router-dom";
+
+const LoadComponent = () => {
+  const [ isLoading ] = useGlobalState("loading");
+  return isLoading === true ? (
+    <Overlay isOpen={isLoading}>
+      <Spinner className={'center-spinner'} />
+    </Overlay>
+  ) : null;
+}
+
+function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GlobalStateProvider>
+      <Router>
+        <div className="flex-container">
+          <LoadComponent/>
+          <Header className="flex-item"/>
+          <Main className="flex-item"/>
+          <Footer className="flex-item"/>
+        </div>
+      </Router>
+    </GlobalStateProvider>
   );
 }
 

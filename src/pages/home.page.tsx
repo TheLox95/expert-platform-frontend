@@ -1,0 +1,27 @@
+import React, { useState, useEffect} from 'react';
+import axios from "axios";
+import { wrapper, WrappedComponent } from "state";
+import Table from 'pages/offering/offering-table';
+
+export const Home: WrappedComponent = ( props ) => {
+    const { http } = props;
+    const [ results, updateResult ] = useState([]);
+
+    useEffect(() => {
+        const CancelToken = axios.CancelToken;
+        const source = CancelToken.source();
+        http({url: 'http://localhost:1337/offerings?_sort=created_at:DESC', method: 'get', cancelToken: source.token })
+        .then(r => {
+            console.log(r)
+            updateResult(() => r.data )
+        })
+        .catch(() => {})
+        return () => {
+            source.cancel();
+        };
+    }, [http]);
+
+    return (<Table results={results}></Table>)
+}
+
+export default wrapper(Home)
