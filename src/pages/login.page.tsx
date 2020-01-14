@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom'
 import { wrapper, WrappedComponent } from "state";
 import { FormGroup, InputGroup, Button } from "@blueprintjs/core";
+import { User } from 'models';
 
-const Login: WrappedComponent = (prop) => {
+const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
     const { http, useGlobalState } = prop
     const [ user, updateUser ] = useGlobalState('user');
     const [ username, updateUsername ] = useState('');
@@ -18,7 +19,7 @@ const Login: WrappedComponent = (prop) => {
                 identifier: username,
                 password: password,
             }
-        }).then(response => {
+        }).then((response) => {
             // Handle success.
             console.log('Well done!');
             console.log('User profile', response.data.user);

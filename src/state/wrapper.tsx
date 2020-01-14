@@ -1,26 +1,26 @@
 import React from 'react';
-import { AxiosInstance } from 'axios';
 import { useGlobalState as getGlobalState, UseGlobalState } from "./store";
 import actions, { Actions } from "./actions";
-import http from "./http";
+import http, { HttpInstance, AllInterface } from "./http";
 
-export interface GlobalProps {
-  useGlobalState: UseGlobalState,
-  actions: Actions,
-  http: AxiosInstance,
+export interface GlobalProps<T ={}> {
+  useGlobalState: UseGlobalState
+  actions: Actions
+  http: HttpInstance<T>
+  All: AllInterface
 };
 
 export default <P extends {}>(Wrapped: React.ComponentType<P>) =>(props: any) => {
   const [ , updateLoading ] = getGlobalState('loading');
   const [ , updateError ] = getGlobalState('error');
 
-  const instance = http(updateLoading, updateError );
+  const modules = http(updateLoading, updateError );
 
-
-  const p = {
+  const p: GlobalProps = {
     useGlobalState: getGlobalState,
     actions: actions,
-    http: instance,
+    http: modules.instance,
+    All: modules.All,
   }
   return <Wrapped {...props as P} {...p}/>
 };

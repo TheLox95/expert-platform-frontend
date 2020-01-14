@@ -12,8 +12,7 @@ export const Home: WrappedComponent = ( props ) => {
         const source = CancelToken.source();
         http({url: 'http://localhost:1337/offerings?_sort=created_at:DESC', method: 'get', cancelToken: source.token })
         .then(r => {
-            console.log(r)
-            updateResult(() => r.data )
+            updateResult(r.data as [])
         })
         .catch(() => {})
         return () => {

@@ -1,5 +1,6 @@
 import { Photo } from './Photo'
 import { Video } from './Video'
+import { Offering } from './Offering'
 
 export interface User {
     id: number;
@@ -14,4 +15,5 @@ export interface User {
     updated_at: Date;
     photos: Photo[];
     videos: Video[];
+    offerings: Offering[]
 }

@@ -31,5 +31,5 @@ export {
     ProtectedRoute,
 }
 
-export type WrappedComponent = React.ComponentType<GlobalP>;
+export type WrappedComponent<T = {}> = React.ComponentType<GlobalP<T> & T>;
 export type GlobalProps = GlobalP;

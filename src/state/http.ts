@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosPromise } from 'axios';
 
 let options = {}
 let instance: AxiosInstance | null = null
@@ -11,7 +11,19 @@ if (localStorage.getItem('token') !== null) {
   }
 }
 
-export default (updateLoading: unknown, updateError: unknown) => {
+export interface HttpInstance<T = {}> {
+  (config: AxiosRequestConfig & { disableGLobal?: boolean }): AxiosPromise<T>
+}
+
+export interface AllInterface {
+  (config: AxiosPromise[]): Promise<AxiosResponse<any>[]>
+}
+
+export interface HttpInterface extends AxiosInstance {
+  All: AllInterface;
+}
+
+export default (updateLoading: unknown, updateError: unknown): { instance: HttpInstance, All: AllInterface } => {
   const responseInterceptor = (response: AxiosResponse) => {
     if (typeof updateLoading === 'function') {
       updateLoading(() => false)
@@ -73,13 +85,26 @@ export default (updateLoading: unknown, updateError: unknown) => {
     return config;
   }
 
+  const All: AllInterface = (requests) => {
+    if (typeof updateLoading === 'function') {
+      updateLoading(true)
+    }
+    return axios.all(requests)
+    .then((r) => {
+      if (typeof updateLoading === 'function') {
+        updateLoading(false)
+      }
+      return r;
+    });
+  }
+
   if (instance === null) {
     instance = axios.create(options);
     instance.interceptors.request.use(requestInterceptor)
     instance.interceptors.response.use(responseInterceptor, errorInterceptor)
-    return instance;
+    return { instance, All };
   } else {
-    return instance;
+    return { instance, All };
   }
 }
 
