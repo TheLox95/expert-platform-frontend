@@ -5,88 +5,13 @@ import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
 import { HttpInstance, AllInterface } from 'state/http';
 import Progress from './Progres';
 import { AxiosPromise } from 'axios';
-
-const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
-    const data = new FormData()
-    data.append('files', file)
-
-    return () => {
-        return http({
-            disableGLobal: true,
-            url: 'http://localhost:1337/upload',
-            method: 'post',
-            data,
-            onUploadProgress: function(progressEvent ) {
-                var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                onProgress(percentCompleted)
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-    }
-}
-
-class Manager {
-    hasStarted = false
-    startCalledTimes = 0
-    instances: Array<() => AxiosPromise> = [];
-
-    constructor(public all: AllInterface) {}
-
-    getHttp(http: HttpInstance, file: File, onProgress: (v: number) => void) {
-        const i = uploadFile(http, file, onProgress);
-        this.instances.push(i)
-        return this;
-    }
-
-    start() {
-        if (this.hasStarted === false) {
-            this.hasStarted = true
-            return this.all(this.instances.map(i => i()))
-            .then((r) => console.log(r))
-        }
-    }
-}
-
-let manager: Manager | null = null
+import UploadManager from './UploadManager';
 
 const Form: WrappedComponent<{ isOpen: boolean, close: () => void}> = (props) => {
     const { register, handleSubmit, getValues, errors } = useForm()
     const { isOpen, close, All } = props;
     const [ photos, updatePhotos ] = useState<File[]>([]);
     const [ videos, updateVideos ] = useState<File[]>([]);
-    if (manager === null) {
-        manager = new Manager(All)
-    }
-
-    useEffect(() => {
-        if (photos.length !== 0) {
-            if (manager) {
-                const r = manager.start();
-                if (r) {
-                    r.then(() => {
-                        manager = new Manager(All)
-                        updatePhotos([])
-                    })
-                }
-            }
-        }
-        if (videos.length !== 0) {
-            if (manager) {
-                const r = manager.start();
-                if (r) {
-                    r.then(() => {
-                        manager = new Manager(All)
-                        updateVideos([])
-                    })
-                }
-            }
-        }
-        return () => {
-
-        }
-    }, [ photos.length, videos.length ]);
 
     return (
         <Overlay onClose={close} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={isOpen}>
@@ -122,9 +47,7 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void}> = (props) =>
                         }}/>
                         <span className="bp3-file-upload-input">Choose file...</span>
                     </label>
-                    {photos.map((f) => {
-                        return <Progress key={f.name} manager={manager} file={f} />
-                    })}
+                    {photos ? <UploadManager files={photos} /> : null}
                 </FormGroup>
 
 
@@ -140,9 +63,6 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void}> = (props) =>
                         }}/>
                         <span className="bp3-file-upload-input">Choose file...</span>
                     </label>
-                    {videos.map((f) => {
-                        return <Progress key={f.name} manager={manager} file={f} />
-                    })}
                 </FormGroup>
 
                 <br />

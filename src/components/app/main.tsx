@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { Toaster, Toast, Position, Intent } from "@blueprintjs/core";
 import { Route, useLocation } from "react-router-dom";
-import { useGlobalState, ProtectedRoute, wrapper, WrappedComponent } from "state";
+import { ProtectedRoute, wrapper, WrappedComponent } from "state";
 import OfferingsDirectory from 'pages/offering/offerings-directory.page';
 import Profile from 'pages/experts/profile.page';
 import Login from 'pages/login.page';
 import Home from 'pages/home.page';
 import Dashboard from 'pages/experts/dashboard.page';
 
-const Main: WrappedComponent = () => {
+const Main: WrappedComponent = (props) => {
+    const { useGlobalState } = props;
     const [ error, updateError ] = useGlobalState("error");
     const [ success, updateSuccess ] = useGlobalState("success");
     const [ , update ] = useGlobalState('results');
@@ -21,7 +22,7 @@ const Main: WrappedComponent = () => {
     },[location, update])
 
     return (
-        <main style={{ height: '100%', padding: '2rem' }}>
+        <main style={{ height: '100%', padding: '2rem' }} className="flex-item">
             { error && (
                 <Toaster position={Position.TOP}>
                     {/* "Toasted!" will appear here after clicking button. */}

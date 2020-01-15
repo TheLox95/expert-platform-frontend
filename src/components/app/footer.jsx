@@ -3,7 +3,7 @@ import { wrapper } from "state";
 import { Callout } from "@blueprintjs/core";
 
 const Footer = () => {
-    return (<Callout>
+    return (<Callout className="flex-item">
         Footer
     </Callout>);
 }

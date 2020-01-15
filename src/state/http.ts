@@ -23,7 +23,7 @@ export interface HttpInterface extends AxiosInstance {
   All: AllInterface;
 }
 
-export default (updateLoading: unknown, updateError: unknown): { instance: HttpInstance, All: AllInterface } => {
+export default <P>(updateLoading: unknown, updateError: unknown): { instance: HttpInstance<P>, All: AllInterface } => {
   const responseInterceptor = (response: AxiosResponse) => {
     if (typeof updateLoading === 'function') {
       updateLoading(() => false)

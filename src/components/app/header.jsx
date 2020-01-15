@@ -27,7 +27,7 @@ const Header = (props) => {
     }
 
     return (
-        <Navbar id='navbar'>
+        <Navbar id='navbar' className="flex-item">
             <NavbarGroup align={Alignment.LEFT}>
                 <NavbarHeading>Platform</NavbarHeading>
                 <form

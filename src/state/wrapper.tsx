@@ -2,6 +2,7 @@ import React from 'react';
 import { useGlobalState as getGlobalState, UseGlobalState } from "./store";
 import actions, { Actions } from "./actions";
 import http, { HttpInstance, AllInterface } from "./http";
+import { WrappedComponent } from 'state';
 
 export interface GlobalProps<T ={}> {
   useGlobalState: UseGlobalState
@@ -10,17 +11,17 @@ export interface GlobalProps<T ={}> {
   All: AllInterface
 };
 
-export default <P extends {}>(Wrapped: React.ComponentType<P>) =>(props: any) => {
+export default <P extends {}>(Wrapped: WrappedComponent<P>) => (props: React.PropsWithChildren<P>) => {
   const [ , updateLoading ] = getGlobalState('loading');
   const [ , updateError ] = getGlobalState('error');
 
-  const modules = http(updateLoading, updateError );
+  const modules = http<P>(updateLoading, updateError );
 
-  const p: GlobalProps = {
+  const p: GlobalProps<P> = {
     useGlobalState: getGlobalState,
     actions: actions,
     http: modules.instance,
     All: modules.All,
   }
-  return <Wrapped {...props as P} {...p}/>
+  return <Wrapped {...props} {...p}/>
 };
