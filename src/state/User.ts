@@ -25,7 +25,6 @@ export default (p: GlobalProps) => ({
                 ...user,
                 offerings
             }
-            console.log(user)
             p.dispatch({ type: 'user', payload: user })
         }))
     }

@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
 import UploadManager from './UploadManager';
 
+let wasSend = false;
+
 const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () => void}> = (props) => {
     const { isOpen, close, http, onSendOk, useGlobalState } = props;
     const { register, handleSubmit, getValues, errors } = useForm()
-    const [ wasSend, uploadWasSend ] = useState(false);
     const [ photos, updatePhotos ] = useState<File[]>([]);
     const [ videos, updateVideos ] = useState<File[]>([]);
     const [ user ] = useGlobalState('user');
 
     const [ uploadedPhotos, updateUploadedPhotos ] = useState<any[]>([]);
     const [ uploadedVideos, updateUploadedVideos ] = useState<any[]>([]);
+
+    useEffect(() => {
+        return () => { wasSend = false }
+    },[]);
 
     return (
         <Overlay onClose={close} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={isOpen}>
@@ -35,7 +40,7 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () 
                     }
                 })
                 .then((r) => {
-                    uploadWasSend(true);
+                    wasSend = true;
                     onSendOk();
                     close();
                 });

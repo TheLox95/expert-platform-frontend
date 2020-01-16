@@ -16,7 +16,7 @@ const Offerings: WrappedComponent<{ user: User, canAdd?: boolean }> = (props) =>
     const { http, useGlobalState, dispatch } = props;
     const [ offering, updateOffering ] = useState<Offering | null>(null)
     const [ creating, updateCreating ] = useState(false)
-    const [ user, updateLoggedUser ] = useGlobalState('user');
+    const [ user ] = useGlobalState('user');
 
     const updateUser = () => {
         axios.all([

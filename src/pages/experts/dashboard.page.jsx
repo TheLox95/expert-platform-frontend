@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { wrapper } from "state";
 import { Tabs, Tab, Card, Classes, EditableText, Button, Intent } from "@blueprintjs/core";
 import Offerings from "./offerings"
 import Info from "./info"
 import Opinions from "./opinions"
-
-const getUser = (id, http) => http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data)
-const getOfferings = (http) => http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data)
-const getOpinions = (http) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
 
 const Profile = (prop) => {
     const { http, useGlobalState, requests } = prop;
