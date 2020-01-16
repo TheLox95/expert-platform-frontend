@@ -17,6 +17,7 @@ export interface HttpInstance<T = {}> {
 
 export interface AllInterface {
   (config: AxiosPromise[]): Promise<AxiosResponse<any>[]>
+  (config: Promise<any>[]): Promise<any[]>
 }
 
 export interface HttpInterface extends AxiosInstance {
@@ -26,7 +27,7 @@ export interface HttpInterface extends AxiosInstance {
 export default <P>(updateLoading: unknown, updateError: unknown): { instance: HttpInstance<P>, All: AllInterface } => {
   const responseInterceptor = (response: AxiosResponse) => {
     if (typeof updateLoading === 'function') {
-      updateLoading(() => false)
+      updateLoading(false)
     }
     // Do something with response data
     return response;
@@ -85,7 +86,7 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
     return config;
   }
 
-  const All: AllInterface = (requests) => {
+  const All: AllInterface = (requests: Promise<any>[]) => {
     if (typeof updateLoading === 'function') {
       updateLoading(true)
     }

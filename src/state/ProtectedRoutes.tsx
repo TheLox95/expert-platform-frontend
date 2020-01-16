@@ -4,7 +4,7 @@ import { wrapper, WrappedComponent } from 'state';
 
 const Protect: WrappedComponent = (props) => {
     const { useGlobalState, children } = props;
-    const [ user ] = useGlobalState("user");
+    const [ user ] = useGlobalState('user');
 
     return (
     <Fragment>

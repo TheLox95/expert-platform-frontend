@@ -12,7 +12,7 @@ const SessionFactory: React.SFC<{ component: string}> = (props) => {
     const [ user ] = useGlobalState('user')
     let toRender = Login;
 
-    if (user === null) {
+    if (!user) {
         toRender = NonLogin
     }
 

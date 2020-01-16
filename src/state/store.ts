@@ -1,4 +1,4 @@
-import { createStore, UseGlobalState as Global, Dispatch } from 'react-hooks-global-state';
+import { createStore, UseGlobalState as Global } from 'react-hooks-global-state';
 import { User, Offering } from 'models';
 
 export interface InitialState {
@@ -25,9 +25,10 @@ const reducer = (state:InitialState, action: DispatchInterface) => {
     switch (action.type) {
       case 'user': {
           if (typeof action.payload === 'object') {
-            return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null
+            localStorage.setItem('user', JSON.stringify(action.payload))
+            return { ...state, user: action.payload};
           }
-        return action.payload;
+        return { ...state, user: action.payload};
       }
       default: return state;
     }

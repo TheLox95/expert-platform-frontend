@@ -70,7 +70,7 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () 
                         }}/>
                         <span className="bp3-file-upload-input">Photos</span>
                     </label>
-                    {photos ? <UploadManager files={photos} wasSend={wasSend} onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}/> : null}
+                    {photos ? <UploadManager files={photos} wasSend={() => wasSend} onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}/> : null}
                 </FormGroup>
 
 
@@ -86,7 +86,7 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () 
                         }}/>
                         <span className="bp3-file-upload-input">Videos</span>
                     </label>
-                    {videos ? <UploadManager files={videos} wasSend={wasSend} onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}/> : null}
+                    {videos ? <UploadManager files={videos} wasSend={() => wasSend} onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}/> : null}
                 </FormGroup>
 
                 <br />

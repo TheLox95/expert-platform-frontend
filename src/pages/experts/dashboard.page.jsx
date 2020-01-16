@@ -12,38 +12,18 @@ const getOfferings = (http) => http({ method: 'get', url: `http://localhost:1337
 const getOpinions = (http) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
 
 const Profile = (prop) => {
-    const { http, useGlobalState } = prop;
+    const { http, useGlobalState, requests } = prop;
     const [ currentUser ] = useGlobalState('user');
     const [ , updateSuccess ] = useGlobalState('success');
     
     const [ tab, updateTab ] = useState("Info");
-    const [ user, updateUser ] = useState(null);
     const [ isEditing, updateIsEditing ] = useState(false);
     const [ username, updateUsername ] = useState("");
     const [ aboutme, updateAboutme ] = useState("");
 
     useEffect(() => {
-        axios.all([
-            getUser(currentUser.id, http),
-            getOfferings(http),
-            getOpinions(http)
-        ])
-        .then(axios.spread((user, offerings, opinions) => {
-            offerings = offerings.map(offering => {
-                offering.opinions = offering.opinions.map(originalOpinion => {
-                    return opinions.filter(fullOpiniion => fullOpiniion.user.id === originalOpinion.user)
-                }).flat()
-                return offering;
-            })
-            user = {
-                ...user,
-                offerings
-            }
-            updateUsername(user.username)
-            updateAboutme(user.aboutme)
-            updateUser(user)
-        }))
-    }, [currentUser.id, http]);
+        requests.user.getUser(currentUser.id)
+    }, []);
 
     const update = (id) => () =>{
         const data = { username, aboutme }
@@ -51,25 +31,25 @@ const Profile = (prop) => {
         .then(() => {updateIsEditing(false); updateSuccess('Information updated!')});
     }
 
-    return ( user !== null && user.role.type !== 'expert') ? <Redirect to="/" /> : (
+    return ( currentUser !== null && currentUser.role.type !== 'expert') ? <Redirect to="/" /> : (
         <>
-        <Card style={{ display: 'flex', marginBottom: '1.5rem' }} className={user === null ? Classes.SKELETON: ''}>
+        <Card style={{ display: 'flex', marginBottom: '1.5rem' }} className={currentUser === null ? Classes.SKELETON: ''}>
             <div>
                 <img src="http://lorempixel.com/200/200/" alt=""/>
             </div>
             <div style={{ marginLeft: '1rem'}}>
                 <h2>
-                    {user === null ? null: (
-                        <EditableText onChange={(v) => {updateIsEditing(true);updateUsername(v)}} defaultValue={user.username.charAt(0).toUpperCase() + user.username.slice(1)} />
+                    {currentUser === null ? null: (
+                        <EditableText onChange={(v) => {updateIsEditing(true);updateUsername(v)}} defaultValue={currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)} />
                     )}
                 </h2>
                 <p>
-                    {user === null ? null: (
-                        <EditableText onChange={(v) => {updateIsEditing(true);updateAboutme(v)}} multiline={true} defaultValue={user.aboutme} />
+                    {currentUser === null ? null: (
+                        <EditableText onChange={(v) => {updateIsEditing(true);updateAboutme(v)}} multiline={true} defaultValue={currentUser.aboutme} />
                     )}
                 </p>
             </div>
-            {isEditing ? <Button intent={Intent.PRIMARY} onClick={update(user.id)} style={{ marginLeft: 'auto', alignSelf: 'start'}} text="Update"/> : null}
+            {isEditing ? <Button intent={Intent.PRIMARY} onClick={update(currentUser.id)} style={{ marginLeft: 'auto', alignSelf: 'start'}} text="Update"/> : null}
         </Card>
         <Card style={{ height: 'auto' }}>
             <Tabs
@@ -80,9 +60,9 @@ const Profile = (prop) => {
                 renderActiveTabPanelOnly={true}
                 selectedTabId={tab}
             >
-                <Tab id="Info" title="Info" panel={user ? <Info user={user}/> : null} />
-                <Tab id="Offerings" title="Offerings" panel={<Offerings user={user}/>} />
-                <Tab id="Opinions" title="Opinions" panel={<Opinions user={user}/>} />
+                <Tab id="Info" title="Info" panel={currentUser ? <Info user={currentUser}/> : null} />
+                <Tab id="Offerings" title="Offerings" panel={<Offerings user={currentUser}/>} />
+                <Tab id="Opinions" title="Opinions" panel={<Opinions user={currentUser}/>} />
             </Tabs>
         </Card>
         </>

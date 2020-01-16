@@ -50,7 +50,7 @@ class UploadManager {
 let manager: UploadManager | null = null
 let uploadedFiles: Array<any> = []
 
-const Manager: WrappedComponent<{ files: File[], wasSend: boolean, onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
+const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
     const { files, wasSend, All, http, onUploadedFiles } = props;
 
     if (!manager) {
@@ -72,7 +72,7 @@ const Manager: WrappedComponent<{ files: File[], wasSend: boolean, onUploadedFil
 
     useEffect(() => {
         return () => {
-            if (wasSend === false) {
+            if (wasSend() === false) {
                 All(uploadedFiles.map(file => http({ url: `http://localhost:1337/upload/files/${file.id}`, method: 'delete'})))
                 .then((r) => {
                     console.log(r)
