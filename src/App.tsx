@@ -1,5 +1,5 @@
 import React from 'react';
-import { GlobalStateProvider, useGlobalState, wrapper } from "./state";
+import { GlobalStateProvider, useGlobalState } from "./state";
 import { Overlay, Spinner } from "@blueprintjs/core";
 import Header from './components/app/header';
 import Main from './components/app/main';

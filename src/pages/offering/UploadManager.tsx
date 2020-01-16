@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Progress from './Progres';
 import { wrapper, WrappedComponent } from 'state';
 import { AxiosPromise } from 'axios';
 import { HttpInstance, AllInterface } from 'state/http';
+import { Photo, Video } from 'models';
 
 const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
     const data = new FormData()
@@ -43,30 +44,45 @@ class UploadManager {
         if (this.hasStarted === false) {
             this.hasStarted = true
             return this.all(this.instances.map(i => i()))
-            .then((r) => console.log(r))
         }
     }
 }
 
 let manager: UploadManager | null = null
+let uploadedFiles: Array<any> = []
 
-const Manager: WrappedComponent<{ files: File[]}> = (props) => {
-    const { files, All } = props;
-    // const [ photos, updatePhotos ] = useState<File[]>([]);
+const Manager: WrappedComponent<{ files: File[], wasSend: boolean, onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
+    const { files, wasSend, All, http, onUploadedFiles } = props;
+
+    if (!manager) {
+        manager = new UploadManager(All);
+    }
 
     useEffect(() => {
-        if (files.length !== 0) {
-            if (manager) {
-                const r = manager.start();
-                if (r) {
-                    r.then(() => {
-                        manager = new UploadManager(All)
-                    })
-                }
+        if (manager) {
+            const waitForUpload = manager.start();
+            if (waitForUpload) {
+                waitForUpload.then((responses) => {
+                    uploadedFiles = [ ...uploadedFiles, ...responses.map((r) => r.data).flat()]
+                    onUploadedFiles(uploadedFiles)
+                    manager = new UploadManager(All)
+                })
             }
         }
-    });
+    }, [files]);
 
+    useEffect(() => {
+        return () => {
+            if (wasSend === false) {
+                All(uploadedFiles.map(file => http({ url: `http://localhost:1337/upload/files/${file.id}`, method: 'delete'})))
+                .then((r) => {
+                    console.log(r)
+                    console.log('Form was not send and files were deleted from backedn')
+                    uploadedFiles = [];
+                })
+            } 
+        }
+    }, []);
     return (
         <>
             {files.map(f => {
