@@ -3,7 +3,6 @@ import Progress from './Progres';
 import { wrapper, WrappedComponent } from 'state';
 import { AxiosPromise } from 'axios';
 import { HttpInstance, AllInterface } from 'state/http';
-import { Photo, Video } from 'models';
 
 const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
     const data = new FormData()

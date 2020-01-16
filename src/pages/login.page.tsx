@@ -20,13 +20,16 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
                 password: password,
             }
         }).then((response) => {
+            const user = response.data.user;
+            const jwt = response.data.jwt;
             // Handle success.
             console.log('Well done!');
-            console.log('User profile', response.data.user);
-            console.log('User token', response.data.jwt);
-            localStorage.setItem('token', response.data.jwt)
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            updateUser(response.data.user);
+            console.log('User profile', user);
+            localStorage.setItem('user', JSON.stringify(user))
+            updateUser(user);
+
+            console.log('User token', jwt);
+            localStorage.setItem('token', jwt)
         })
         .catch(error => {
             // Handle error.

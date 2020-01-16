@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { wrapper, WrappedComponent } from 'state'
-import { Overlay, Classes, Intent, Button, FormGroup, Label } from "@blueprintjs/core";
+import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
 import UploadManager from './UploadManager';
 
-const Form: WrappedComponent<{ isOpen: boolean, close: () => void}> = (props) => {
-    const { isOpen, close, http } = props;
+const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () => void}> = (props) => {
+    const { isOpen, close, http, onSendOk, useGlobalState } = props;
     const { register, handleSubmit, getValues, errors } = useForm()
     const [ wasSend, uploadWasSend ] = useState(false);
     const [ photos, updatePhotos ] = useState<File[]>([]);
     const [ videos, updateVideos ] = useState<File[]>([]);
+    const [ user ] = useGlobalState('user');
 
     const [ uploadedPhotos, updateUploadedPhotos ] = useState<any[]>([]);
     const [ uploadedVideos, updateUploadedVideos ] = useState<any[]>([]);
@@ -28,12 +29,15 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void}> = (props) =>
                     data: {
                         name: title,
                         description,
+                        user: user?.id,
                         photos: uploadedPhotos.map(f => f.id),
                         videos: uploadedVideos.map(f => f.id)
                     }
                 })
                 .then((r) => {
                     uploadWasSend(true);
+                    onSendOk();
+                    close();
                 });
             })}>
                 <h3>Create new Offering</h3>

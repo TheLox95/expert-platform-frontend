@@ -8,7 +8,7 @@ import Info from "./info"
 import Opinions from "./opinions"
 
 const getUser = (id, http) => http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data)
-const getOfferings = (http) => http({ method: 'get', url: `http://localhost:1337/offerings` }).then(r => r.data)
+const getOfferings = (http) => http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data)
 const getOpinions = (http) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
 
 const Profile = (prop) => {

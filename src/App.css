@@ -3,7 +3,7 @@
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 .flex-container {
-    height: 100vh;
+    min-height: 100vh;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
