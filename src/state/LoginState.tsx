@@ -5,7 +5,7 @@ import { Text, Button, Classes } from "@blueprintjs/core";
 
 const obj = {
     LoginButton: (props: GlobalProps) => {
-        const { useGlobalState } = props;
+        const { useGlobalState, requests } = props;
         const [ user ] = useGlobalState('user');
 
         return (
@@ -14,6 +14,12 @@ const obj = {
                     <Button className={Classes.MINIMAL} icon="dashboard" text="Dashboard" />
                 </Link>
                 <Text>Hi {user?.username}!</Text>
+                <Button
+                    className={Classes.MINIMAL}
+                    icon="log-out"
+                    text="Logout"
+                    onClick={() => requests.user.logout()}
+                />
             </>
         );
     }

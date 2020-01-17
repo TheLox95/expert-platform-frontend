@@ -19,7 +19,7 @@ const initialState: InitialState = {
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null
 };
 
-export type DispatchInterface = {type: string, payload: any};
+export type DispatchInterface = {type: string, payload?: any};
 
 const reducer = (state:InitialState, action: DispatchInterface) => {
     switch (action.type) {
@@ -30,6 +30,11 @@ const reducer = (state:InitialState, action: DispatchInterface) => {
           }
         return { ...state, user: action.payload};
       }
+      case 'logout': {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        return { ...state, user: null};
+    }
       default: return state;
     }
 };

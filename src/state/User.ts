@@ -3,6 +3,9 @@ import { GlobalProps } from "./wrapper"
 import { Offering, Opinion } from "models"
 
 export default (p: GlobalProps) => ({
+    logout: () => {
+        p.dispatch({ type: 'logout' })
+    },
     getUser: (id: number) => {
         p.All([
             p.http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data),
