@@ -33,10 +33,14 @@ const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => v
 
 class UploadManager {
     hasStarted = false
-    uploadedFiles: Array<{ id: number}> = [];
+    uploadedFiles: Array<{ id: number, name: string }> = [];
     instances: Array<() => AxiosPromise> = [];
 
-    constructor(public all: AllInterface, public http: HttpInstance,) {}
+    constructor(public all: AllInterface, public http: HttpInstance, public onDelete: (file: File) => void) {}
+
+    getFile(name: string) {
+        return this.uploadedFiles.find(f => f.name === name)
+    }
 
     getHttp(file: File, onProgress: (v: number) => void) {
         const i = uploadFile(this.http, file, onProgress);
@@ -66,11 +70,19 @@ class UploadManager {
             this.uploadedFiles = [];
         })
     }
+
+    delete(file: File) {
+        const fileToDelete = this.getFile(file.name);
+        if (fileToDelete) {
+            this.onDelete(file)
+            this.http({ url: `http://localhost:1337/upload/files/${fileToDelete.id}`, method: 'delete'})
+        }
+    }
 }
 
-const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
-    const { files, wasSend, All, http, onUploadedFiles } = props;
-    const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http));
+const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onDelete: (file: File) => void ,onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
+    const { files, wasSend, All, http, onUploadedFiles, onDelete } = props;
+    const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http, onDelete));
 
     useEffect(() => {
         if (files.length !== 0) {

@@ -75,7 +75,16 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                         }}/>
                         <span className="bp3-file-upload-input">Photos</span>
                     </label>
-                    {photos ? <UploadManager files={photos} wasSend={() => wasSend} onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}/> : null}
+                    {photos ? <UploadManager
+                        files={photos}
+                        wasSend={() => wasSend}
+                        onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}
+                        onDelete={(file) => {
+                            updatePhotos((prev) => {
+                                return prev.filter(f => f.name != file.name)
+                            });
+                        }}
+                        /> : null}
                 </FormGroup>
 
 
@@ -91,7 +100,11 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                         }}/>
                         <span className="bp3-file-upload-input">Videos</span>
                     </label>
-                    {videos ? <UploadManager files={videos} wasSend={() => wasSend} onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}/> : null}
+                    {videos ? <UploadManager
+                        files={videos}
+                        wasSend={() => wasSend}
+                        onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}
+                        onDelete={(file) => console.log(file)} /> : null}
                 </FormGroup>
 
                 <br />
