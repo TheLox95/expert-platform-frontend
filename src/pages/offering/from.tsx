@@ -6,8 +6,8 @@ import UploadManager from './UploadManager';
 
 let wasSend = false;
 
-const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () => void}> = (props) => {
-    const { isOpen, close, http, onSendOk, useGlobalState } = props;
+const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (props) => {
+    const { close, http, onSendOk, useGlobalState } = props;
     const { register, handleSubmit, getValues, errors } = useForm()
     const [ photos, updatePhotos ] = useState<File[]>([]);
     const [ videos, updateVideos ] = useState<File[]>([]);
@@ -21,7 +21,7 @@ const Form: WrappedComponent<{ isOpen: boolean, close: () => void, onSendOk: () 
     },[]);
 
     return (
-        <Overlay onClose={close} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={isOpen}>
+        <Overlay onClose={close} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={true}>
             <div className={Classes.CARD} style={{ left: "calc(50vw - 200px)", width: 400, margin: '10vh 0' }}>
             <form onSubmit={handleSubmit(data => {
                 const {

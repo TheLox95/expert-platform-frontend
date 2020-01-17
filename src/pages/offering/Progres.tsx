@@ -3,11 +3,11 @@ import { wrapper, WrappedComponent } from "state";
 import { ProgressBar, Intent, Text } from "@blueprintjs/core";
 
 const Progress: WrappedComponent<{ manager: any, file: File }> = (props) => {
-    const { http, manager, file } = props;
+    const { manager, file } = props;
     const [ progress, updateProgress ] = useState(0)
 
     useEffect(() => {
-        manager.getHttp(http, file, (v: number) => updateProgress(v))
+        manager.getHttp(file, (v: number) => updateProgress(v))
     }, []);
 
     return (

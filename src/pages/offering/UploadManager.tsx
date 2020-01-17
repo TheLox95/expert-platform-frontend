@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Progress from './Progres';
 import { wrapper, WrappedComponent } from 'state';
 import { AxiosPromise } from 'axios';
@@ -28,64 +28,59 @@ const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => v
 
 class UploadManager {
     hasStarted = false
-    startCalledTimes = 0
+    uploadedFiles: Array<{ id: number}> = [];
     instances: Array<() => AxiosPromise> = [];
 
-    constructor(public all: AllInterface) {}
+    constructor(public all: AllInterface, public http: HttpInstance,) {}
 
-    getHttp(http: HttpInstance, file: File, onProgress: (v: number) => void) {
-        const i = uploadFile(http, file, onProgress);
+    getHttp(file: File, onProgress: (v: number) => void) {
+        const i = uploadFile(this.http, file, onProgress);
         this.instances.push(i)
         return this;
     }
 
-    start() {
+    start(onUploadedFiles: (value: {id:number}[]) => void) {
         if (this.hasStarted === false) {
             this.hasStarted = true
             return this.all(this.instances.map(i => i()))
+            .then((responses) => {
+                this.uploadedFiles = [ ...this.uploadedFiles, ...responses.map((r) => r.data).flat()]
+                onUploadedFiles(this.uploadedFiles)
+                this.hasStarted = false;
+                return responses;
+            })
         }
+    }
+
+    clear() {
+        return this.all(this.uploadedFiles.map(file => this.http({ url: `http://localhost:1337/upload/files/${file.id}`, method: 'delete'})))
+        .then((r) => {
+            this.uploadedFiles = [];
+        })
     }
 }
 
-let manager: UploadManager | null = null
-let uploadedFiles: Array<any> = []
-
 const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
     const { files, wasSend, All, http, onUploadedFiles } = props;
-
-    if (!manager) {
-        manager = new UploadManager(All);
-    }
+    const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http));
 
     useEffect(() => {
-        if (manager) {
-            const waitForUpload = manager.start();
-            if (waitForUpload) {
-                waitForUpload.then((responses) => {
-                    uploadedFiles = [ ...uploadedFiles, ...responses.map((r) => r.data).flat()]
-                    onUploadedFiles(uploadedFiles)
-                    manager = new UploadManager(All)
-                })
-            }
+        if (files.length !== 0) {
+            managerInstance.start(onUploadedFiles);
         }
-    }, [files]);
+    }, [files.length]);
 
     useEffect(() => {
         return () => {
             if (wasSend() === false) {
-                All(uploadedFiles.map(file => http({ url: `http://localhost:1337/upload/files/${file.id}`, method: 'delete'})))
-                .then((r) => {
-                    console.log(r)
-                    console.log('Form was not send and files were deleted from backedn')
-                    uploadedFiles = [];
-                })
+                managerInstance.clear()
             } 
         }
     }, []);
     return (
         <>
             {files.map(f => {
-                return <Progress key={f.name} manager={manager} file={f} />
+                return <Progress key={f.name} manager={managerInstance} file={f} />
             })}
         </>
     );
