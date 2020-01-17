@@ -10,9 +10,19 @@ const Progress: WrappedComponent<{ manager: any, file: File }> = (props) => {
         manager.getHttp(file, (v: number) => updateProgress(v))
     }, []);
 
+    let intent: Intent = Intent.PRIMARY
+
+    if (progress === 100) {
+        intent = Intent.SUCCESS
+    }
+
+    if (progress === -1) {
+        intent = Intent.DANGER
+    }
+
     return (
         <>
-            <ProgressBar intent={progress === 100 ? Intent.SUCCESS: Intent.PRIMARY} value={progress / 100} animate={progress !== 100}></ProgressBar>
+            <ProgressBar intent={intent} value={progress === -1 ? 100 : progress / 100} animate={progress !== 100 && progress !== -1}></ProgressBar>
             <Text>{file.name}</Text>
         </>
     );

@@ -3,6 +3,7 @@ import Progress from './Progres';
 import { wrapper, WrappedComponent } from 'state';
 import { AxiosPromise } from 'axios';
 import { HttpInstance, AllInterface } from 'state/http';
+import resolveAll from 'promise.allsettled';
 
 const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
     const data = new FormData()
@@ -21,7 +22,11 @@ const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => v
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        });
+        })
+        .catch((err) => {
+            onProgress(-1)
+            throw err;
+        })
     }
 }
 
@@ -42,12 +47,15 @@ class UploadManager {
     start(onUploadedFiles: (value: {id:number}[]) => void) {
         if (this.hasStarted === false) {
             this.hasStarted = true
-            return this.all(this.instances.map(i => i()))
-            .then((responses) => {
-                this.uploadedFiles = [ ...this.uploadedFiles, ...responses.map((r) => r.data).flat()]
-                onUploadedFiles(this.uploadedFiles)
+            return resolveAll(this.instances.map(i => i()))
+            .then((results) => {
+                results.forEach(promiseResult => {
+                    if (promiseResult.status === 'fulfilled') {
+                        this.uploadedFiles = [ ...this.uploadedFiles, ...promiseResult.value.data]
+                        onUploadedFiles(this.uploadedFiles)
+                    }
+                });
                 this.hasStarted = false;
-                return responses;
             })
         }
     }
