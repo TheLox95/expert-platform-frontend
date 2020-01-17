@@ -59,6 +59,7 @@ class UploadManager {
                         onUploadedFiles(this.uploadedFiles)
                     }
                 });
+                this.instances = [];
                 this.hasStarted = false;
             })
         }
@@ -76,6 +77,9 @@ class UploadManager {
         if (fileToDelete) {
             this.onDelete(file)
             this.http({ url: `http://localhost:1337/upload/files/${fileToDelete.id}`, method: 'delete'})
+            .then(() => {
+                this.uploadedFiles = this.uploadedFiles.filter(f => f.id !== fileToDelete.id);
+            })
         }
     }
 }

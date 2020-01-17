@@ -81,7 +81,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                         onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}
                         onDelete={(file) => {
                             updatePhotos((prev) => {
-                                return prev.filter(f => f.name != file.name)
+                                return prev.filter(f => f.name !== file.name)
                             });
                         }}
                         /> : null}
@@ -104,7 +104,12 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                         files={videos}
                         wasSend={() => wasSend}
                         onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}
-                        onDelete={(file) => console.log(file)} /> : null}
+                        onDelete={(file) => {
+                            updateVideos((prev) => {
+                                return prev.filter(f => f.name !== file.name)
+                            });
+                        }}
+                        /> : null}
                 </FormGroup>
 
                 <br />
