@@ -6,15 +6,17 @@ import Preview from './offeringPreview';
 import Form from 'pages/offering/from';
 import { wrapper, WrappedComponent } from 'state';
 
-const Offerings: WrappedComponent<{ user: User, canAdd?: boolean }> = (props) => {
+const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const { useGlobalState, requests } = props;
     const [ offering, updateOffering ] = useState<Offering | null>(null)
     const [ creating, updateCreating ] = useState(false)
     const [ isHovering, updateHovering ] = useState<number | null>(null)
+    const [ isHoveringDelete, updateHoveringDelete ] = useState(false)
     const [ user ] = useGlobalState('user');
+    const [ , updateSuccess ] = useGlobalState('success');
 
     const updateUser = () => {
-        requests.user.getUser();
+        requests.user.getUser(user?.id);
     }
 
     return (
@@ -36,7 +38,20 @@ const Offerings: WrappedComponent<{ user: User, canAdd?: boolean }> = (props) =>
                         </div>
                         {isHovering === idx ? (
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Icon icon="edit" />
+                                <Icon
+                                    style={{ cursor: 'pointer' }}
+                                    icon='delete'
+                                    color={isHoveringDelete ? 'red': ''}
+                                    onMouseEnter={() => updateHoveringDelete(true)}
+                                    onMouseLeave={() => updateHoveringDelete(false)}
+                                    onClick={() => {
+                                        requests.offering.delete(user?.offerings[idx].id)
+                                        .then(() => {
+                                            requests.user.getUser(user?.id)
+                                            updateSuccess(`Offering ${user?.offerings[idx].name} deleted!`);
+                                        });
+                                    }}
+                                />
                             </div>
                         ) : null}
                     </Callout>

@@ -5,6 +5,7 @@ import actions, { Actions } from "./actions";
 import http, { HttpInstance, AllInterface } from "./http";
 import { WrappedComponent } from 'state';
 import User from './User';
+import Offering from './Offering';
 
 export interface GlobalProps<T ={}> {
   useGlobalState: UseGlobalState
@@ -31,7 +32,8 @@ export default <P extends {}>(Wrapped: WrappedComponent<P>) => (props: React.Pro
   }
 
   const requests = {
-    user: User(p)
+    user: User(p),
+    offering: Offering(p)
   }
 
   return <Wrapped {...props} {...p} requests={requests} />
