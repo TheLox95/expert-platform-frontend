@@ -25,7 +25,7 @@ const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => v
         })
         .catch((err) => {
             onProgress(-1)
-            throw err;
+            throw file;
         })
     }
 }
@@ -33,7 +33,7 @@ const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => v
 
 class UploadManager {
     hasStarted = false
-    uploadedFiles: Array<{ id: number, name: string }> = [];
+    uploadedFiles: Array<{ id: number, name: string, wasUploaded?: boolean }> = [];
     instances: Array<() => AxiosPromise> = [];
 
     constructor(public all: AllInterface, public http: HttpInstance, public onDelete: (file: File) => void) {}
@@ -57,6 +57,10 @@ class UploadManager {
                     if (promiseResult.status === 'fulfilled') {
                         this.uploadedFiles = [ ...this.uploadedFiles, ...promiseResult.value.data]
                         onUploadedFiles(this.uploadedFiles)
+                    } else {
+                        if (promiseResult.reason instanceof File) {
+                            this.uploadedFiles = [ ...this.uploadedFiles, {name: promiseResult.reason.name, id: promiseResult.reason.size, wasUploaded: false}]
+                        }
                     }
                 });
                 this.instances = [];
@@ -76,6 +80,9 @@ class UploadManager {
         const fileToDelete = this.getFile(file.name);
         if (fileToDelete) {
             this.onDelete(file)
+            this.uploadedFiles = this.uploadedFiles.filter(f => f.name !== fileToDelete.name);
+        }
+        if (fileToDelete && fileToDelete.wasUploaded !== false) {
             this.http({ url: `http://localhost:1337/upload/files/${fileToDelete.id}`, method: 'delete'})
             .then(() => {
                 this.uploadedFiles = this.uploadedFiles.filter(f => f.id !== fileToDelete.id);
