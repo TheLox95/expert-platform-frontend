@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import ImgsViewer from 'react-images-viewer'
-import ReactPlayer from 'react-player'
-import { Overlay } from "@blueprintjs/core";
+import VideoPreview from 'tools/VideoPreview';
 
 export default function Info(props){
     const { user } = props
     const [ currentImgIdx, updateCurrentImg ] = useState(0);
     const [ open, updateOpen ] = useState(false);
-    const [ playingVideo, updateVideo ] = useState('');
 
     const images = user.photos.map(p => ({ src: `http://localhost:1337/${p.url}`}));
 
@@ -25,17 +23,7 @@ export default function Info(props){
                     }}
                 />
             })}
-            {user.videos.map((video, idx) => {
-                return <img
-                    alt={'video'}
-                    key={video.url}
-                    src={'/play-button.png'}
-                    style={{ width: 100, height: 100, margin: 5 }}
-                    onClick={() => {
-                        updateVideo(`http://localhost:1337${video.url}`)
-                    }}
-                />
-            })}
+            {user.videos.map((video, idx) => <VideoPreview video={video} key={idx}/>)}
             <ImgsViewer
                 imgs={images}
                 currImg={currentImgIdx}
@@ -44,17 +32,6 @@ export default function Info(props){
                 onClickNext={() => updateCurrentImg(currentImgIdx + 1)}
                 onClose={() => {updateCurrentImg(0); updateOpen(false)}}
             />
-            <Overlay isOpen={playingVideo !== ''} onClose={() => updateVideo('')}>
-                <ReactPlayer
-                    style={{
-                        marginLeft: '25%',
-                        marginTop: '10%',
-                    }}
-                    controls={true}
-                    url={playingVideo}
-                >
-                </ReactPlayer>
-            </Overlay>
         </>
       )
 }

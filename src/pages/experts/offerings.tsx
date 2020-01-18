@@ -4,14 +4,18 @@ import { User, Offering } from "models";
 import removeMd from 'remove-markdown';
 import Preview from './offeringPreview';
 import Form from 'pages/offering/from';
+import FormEdit from 'pages/offering/from-edit';
 import { wrapper, WrappedComponent } from 'state';
 
 const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const { useGlobalState, requests } = props;
     const [ offering, updateOffering ] = useState<Offering | null>(null)
     const [ creating, updateCreating ] = useState(false)
+    const [ editing, updateEditing ] = useState(false)
     const [ isHovering, updateHovering ] = useState<number | null>(null)
     const [ isHoveringDelete, updateHoveringDelete ] = useState(false)
+    const [ isHoveringEdit, updateHoveringEdit ] = useState(false)
+    const [ offeringToEdit, updateOfferingToEdit ] = useState<Offering | undefined>(undefined)
     const [ user ] = useGlobalState('user');
     const [ , updateSuccess ] = useGlobalState('success');
 
@@ -36,8 +40,8 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
                             <h2 onClick={() => updateOffering(o)}>{o?.name}</h2>
                             {removeMd(o.description).substring(0, 120)}...
                         </div>
-                        {isHovering === idx ? (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {idx ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <Icon
                                     style={{ cursor: 'pointer' }}
                                     icon='delete'
@@ -52,6 +56,17 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
                                         });
                                     }}
                                 />
+                                <Icon
+                                    style={{ cursor: 'pointer' }}
+                                    icon='edit'
+                                    color={isHoveringEdit ? 'green': ''}
+                                    onMouseEnter={() => updateHoveringEdit(true)}
+                                    onMouseLeave={() => updateHoveringEdit(false)}
+                                    onClick={() => {
+                                        updateEditing(true)
+                                        updateOfferingToEdit(o)
+                                    }}
+                                />
                             </div>
                         ) : null}
                     </Callout>
@@ -59,6 +74,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
             })}
             <Preview offering={offering} updateOffering={updateOffering}/>
             {creating ? <Form close={() => updateCreating(false)} onSendOk={updateUser}/>: null}
+            {editing ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={offeringToEdit}/>: null}
         </>
     );
 }
