@@ -6,6 +6,7 @@ import http, { HttpInstance, AllInterface } from "./http";
 import { WrappedComponent } from 'state';
 import User from './User';
 import Offering from './Offering';
+import File from './File';
 
 export interface GlobalProps<T ={}> {
   useGlobalState: UseGlobalState
@@ -31,9 +32,14 @@ export default <P extends {}>(Wrapped: WrappedComponent<P>) => (props: React.Pro
     requests: null
   }
 
+  const user = User(p)
+  const offering = Offering(p)
+  const file = File(p)
+
   const requests = {
-    user: User(p),
-    offering: Offering(p)
+    user: User({ ...p, requests: { user, offering, file }}),
+    offering: Offering({ ...p, requests: { user, offering, file }}),
+    file: File({ ...p, requests: { user, offering, file }})
   }
 
   return <Wrapped {...props} {...p} requests={requests} />

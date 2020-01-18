@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Overlay, Icon } from "@blueprintjs/core";
 import ReactPlayer from 'react-player'
 import { Video } from 'models';
+import { WrappedComponent, wrapper } from 'state';
 
-const VideoPreview = (props: { video: Video, canClose?: boolean }) => {
-    const { video, canClose } = props;
+const VideoPreview: WrappedComponent<{ video: Video, canDelete?: boolean }> = (props) => {
+    const { video, canDelete, requests } = props;
     const [ playingVideo, updateVideo ] = useState('');
 
     return (
@@ -19,8 +20,14 @@ const VideoPreview = (props: { video: Video, canClose?: boolean }) => {
                     updateVideo(`http://localhost:1337${video.url}`);
                 }}
             />
-            {!canClose ? null: (
-                <Icon icon='delete' style={{ position: 'absolute', left: 0,top: 0, cursor: 'pointer', backgroundColor: 'rgba(255,255,255,0.6)'}}/>
+            {!canDelete ? null: (
+                <Icon
+                    icon='delete'
+                    style={{ position: 'absolute', left: 0,top: 0, cursor: 'pointer', backgroundColor: 'rgba(255,255,255,0.6)'}}
+                    onClick={() => {
+                        requests.file.delete(video.id)
+                    }}
+                />
             )} 
         </div>
         <Overlay isOpen={playingVideo !== ''} onClose={() => updateVideo('')}>
@@ -39,4 +46,4 @@ const VideoPreview = (props: { video: Video, canClose?: boolean }) => {
 
 }
 
-export default VideoPreview;
+export default wrapper(VideoPreview);

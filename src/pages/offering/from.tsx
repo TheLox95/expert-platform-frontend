@@ -4,8 +4,6 @@ import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
 import UploadManager from './UploadManager';
 
-let wasSend = false;
-
 const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (props) => {
     const { close, http, onSendOk, useGlobalState } = props;
     const { register, handleSubmit, getValues, errors } = useForm()
@@ -16,12 +14,20 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
     const [ uploadedPhotos, updateUploadedPhotos ] = useState<any[]>([]);
     const [ uploadedVideos, updateUploadedVideos ] = useState<any[]>([]);
 
+    const [ status, updateStatus ] = useState<'OPENED' | 'CANCELLED' | 'SEND'>('OPENED');
+
     useEffect(() => {
-        return () => { wasSend = false }
-    },[]);
+        if (status === 'SEND') {
+            onSendOk();
+            close();
+        }
+        if (status === 'CANCELLED') {
+            close();
+        }
+    },[status]);
 
     return (
-        <Overlay onClose={close} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={true}>
+        <Overlay onClose={() => updateStatus('CANCELLED')} className={Classes.OVERLAY_SCROLL_CONTAINER} isOpen={true}>
             <div className={Classes.CARD} style={{ left: "calc(50vw - 200px)", width: 400, margin: '10vh 0' }}>
             <form onSubmit={handleSubmit(data => {
                 const {
@@ -40,7 +46,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                     }
                 })
                 .then((r) => {
-                    wasSend = true;
+                    updateStatus('SEND');
                     onSendOk();
                     close();
                 });
@@ -77,7 +83,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                     </label>
                     {photos ? <UploadManager
                         files={photos}
-                        wasSend={() => wasSend}
+                        wasSend={status}
                         onUploadedFiles={(uploaded) => updateUploadedPhotos(uploaded)}
                         onDelete={(file) => {
                             updatePhotos((prev) => {
@@ -102,7 +108,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                     </label>
                     {videos ? <UploadManager
                         files={videos}
-                        wasSend={() => wasSend}
+                        wasSend={status}
                         onUploadedFiles={(uploaded) => updateUploadedVideos(uploaded)}
                         onDelete={(file) => {
                             updateVideos((prev) => {
@@ -114,7 +120,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
 
                 <br />
                 <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                    <Button intent={Intent.DANGER} onClick={close} style={{ margin: "" }}>
+                    <Button intent={Intent.DANGER} onClick={() => updateStatus('CANCELLED')} style={{ margin: "" }}>
                         Close
                     </Button>
                     <Button type='submit' style={{ margin: "" }}>

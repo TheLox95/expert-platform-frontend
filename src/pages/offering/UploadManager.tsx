@@ -91,7 +91,7 @@ class UploadManager {
     }
 }
 
-const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onDelete: (file: File) => void ,onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
+const Manager: WrappedComponent<{ files: File[], wasSend: string, onDelete: (file: File) => void ,onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
     const { files, wasSend, All, http, onUploadedFiles, onDelete } = props;
     const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http, onDelete));
 
@@ -102,12 +102,10 @@ const Manager: WrappedComponent<{ files: File[], wasSend: () => boolean, onDelet
     }, [files.length]);
 
     useEffect(() => {
-        return () => {
-            if (wasSend() === false) {
-                managerInstance.clear()
-            } 
-        }
-    }, []);
+        if (wasSend === 'CANCELLED') {
+            managerInstance.clear()
+        } 
+    }, [wasSend]);
     return (
         <>
             {files.map(f => {

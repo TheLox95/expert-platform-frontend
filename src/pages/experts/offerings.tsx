@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Callout, Button, Icon } from "@blueprintjs/core";
-import { User, Offering } from "models";
+import { Callout, Button } from "@blueprintjs/core";
+import { Offering } from "models";
 import removeMd from 'remove-markdown';
 import Preview from './offeringPreview';
 import Form from 'pages/offering/from';
 import FormEdit from 'pages/offering/from-edit';
 import { wrapper, WrappedComponent } from 'state';
+import HoverIcon from 'tools/HoverIcon';
 
 const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const { useGlobalState, requests } = props;
@@ -13,8 +14,6 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const [ creating, updateCreating ] = useState(false)
     const [ editing, updateEditing ] = useState(false)
     const [ isHovering, updateHovering ] = useState<number | null>(null)
-    const [ isHoveringDelete, updateHoveringDelete ] = useState(false)
-    const [ isHoveringEdit, updateHoveringEdit ] = useState(false)
     const [ offeringToEdit, updateOfferingToEdit ] = useState<Offering | undefined>(undefined)
     const [ user ] = useGlobalState('user');
     const [ , updateSuccess ] = useGlobalState('success');
@@ -40,33 +39,21 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
                             <h2 onClick={() => updateOffering(o)}>{o?.name}</h2>
                             {removeMd(o.description).substring(0, 120)}...
                         </div>
-                        {idx ? (
+                        { isHovering === idx ? (
                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <Icon
-                                    style={{ cursor: 'pointer' }}
-                                    icon='delete'
-                                    color={isHoveringDelete ? 'red': ''}
-                                    onMouseEnter={() => updateHoveringDelete(true)}
-                                    onMouseLeave={() => updateHoveringDelete(false)}
-                                    onClick={() => {
-                                        requests.offering.delete(user?.offerings[idx].id)
-                                        .then(() => {
-                                            requests.user.getUser(user?.id)
-                                            updateSuccess(`Offering ${user?.offerings[idx].name} deleted!`);
-                                        });
-                                    }}
-                                />
-                                <Icon
-                                    style={{ cursor: 'pointer' }}
-                                    icon='edit'
-                                    color={isHoveringEdit ? 'green': ''}
-                                    onMouseEnter={() => updateHoveringEdit(true)}
-                                    onMouseLeave={() => updateHoveringEdit(false)}
-                                    onClick={() => {
-                                        updateEditing(true)
-                                        updateOfferingToEdit(o)
-                                    }}
-                                />
+                                <HoverIcon color='red' icon='delete' onClick={() => {
+                                    requests.offering.delete(user?.offerings[idx].id)
+                                    .then(() => {
+                                        requests.user.getUser(user?.id)
+                                        updateSuccess(`Offering ${user?.offerings[idx].name} deleted!`);
+                                    });
+                                }}/>
+
+                                <HoverIcon color='green' icon='edit' onClick={() => {
+                                    updateEditing(true)
+                                    updateOfferingToEdit(o)
+                                }}/>
+
                             </div>
                         ) : null}
                     </Callout>
@@ -74,7 +61,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
             })}
             <Preview offering={offering} updateOffering={updateOffering}/>
             {creating ? <Form close={() => updateCreating(false)} onSendOk={updateUser}/>: null}
-            {editing ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={offeringToEdit}/>: null}
+            {editing && offeringToEdit ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={offeringToEdit}/>: null}
         </>
     );
 }
