@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { wrapper, WrappedComponent } from "state";
-import { FormGroup, InputGroup, Button } from "@blueprintjs/core";
+import { FormGroup, InputGroup, Button, Callout } from "@blueprintjs/core";
 import { User } from 'models';
 
 const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
@@ -42,23 +42,30 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
     }
 
     return (
-        <form onSubmit={send} id="login-from">
-            <FormGroup
-                label="Username or email"
-                labelFor="user-input"
-            >
-                <InputGroup id="user-input" placeholder="Username or email" onChange={(e: React.FormEvent<HTMLInputElement>) => updateUsername(e.currentTarget.value)} />
-            </FormGroup>
+        <>
+            <form onSubmit={send} id="login-from">
+                <FormGroup
+                    label="Username or email"
+                    labelFor="user-input"
+                >
+                    <InputGroup id="user-input" placeholder="Username or email" onChange={(e: React.FormEvent<HTMLInputElement>) => updateUsername(e.currentTarget.value)} />
+                </FormGroup>
 
-            <FormGroup
-                label="Password"
-                labelFor="password-input"
-            >
-                <InputGroup type="password" id="password-input" placeholder="Password" onChange={(e: React.FormEvent<HTMLInputElement>) => updatePassword(e.currentTarget.value)} />
-            </FormGroup>
+                <FormGroup
+                    label="Password"
+                    labelFor="password-input"
+                >
+                    <InputGroup type="password" id="password-input" placeholder="Password" onChange={(e: React.FormEvent<HTMLInputElement>) => updatePassword(e.currentTarget.value)} />
+                </FormGroup>
 
-            <Button type="submit" id="submit-input">Login</Button>
-        </form>
+                <Button type="submit" id="submit-input">Login</Button>
+            </form>
+            <Callout style={{ marginTop: '1rem'}}>
+                <Link to="/register">
+                    <Button fill={true} id="submit-input">Register</Button>
+                </Link>
+            </Callout>
+        </>
     );
 }
 

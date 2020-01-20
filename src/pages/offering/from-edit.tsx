@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup, Icon } from "@blueprintjs/core";
-import UploadManager from './UploadManager';
+import UploadManager from 'tools/UploadManager';
 import { Offering } from 'models';
 import VideoPreview from 'tools/VideoPreview';
 

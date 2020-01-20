@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Progress from './Progres';
+import Progress from '../pages/offering/Progres';
 import { wrapper, WrappedComponent } from 'state';
 import { AxiosPromise } from 'axios';
 import { HttpInstance, AllInterface } from 'state/http';

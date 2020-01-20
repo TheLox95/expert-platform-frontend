@@ -7,6 +7,7 @@ import Profile from 'pages/experts/profile.page';
 import Login from 'pages/login.page';
 import Home from 'pages/home.page';
 import Dashboard from 'pages/experts/dashboard.page';
+import Register from 'pages/register.page';
 
 const Main: WrappedComponent = (props) => {
     const { useGlobalState } = props;
@@ -39,6 +40,7 @@ const Main: WrappedComponent = (props) => {
             <Route exact path="/search" component={OfferingsDirectory} />
             <Route exact path="/profile/:id" component={Profile} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
             <ProtectedRoute>
                 <Route exact path="/dashboard" component={Dashboard} />
             </ProtectedRoute>

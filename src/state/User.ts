@@ -3,6 +3,26 @@ import { GlobalProps } from "./wrapper"
 import { Offering, Opinion, Photo, Video, User } from "models"
 
 export default (p: GlobalProps) => ({
+    register: (username: string, email: string, password: string, role: string) => {
+        p.http({
+            url: 'http://localhost:1337/auth/local/register',
+            method: 'post',
+            data: {
+                username,
+                email,
+                password,
+                role,
+            }
+        })
+        .then(response => {
+            // Handle success.
+            console.log('Well done!');
+            console.log('User profile', (response.data as any).user);
+            console.log('User token', (response.data as any).jwt);
+            p.dispatch({ type: 'user', payload: (response.data as any).user})
+            localStorage.setItem('token', (response.data as any).jwt)
+        })
+    },
     logout: () => {
         p.dispatch({ type: 'logout' })
     },
