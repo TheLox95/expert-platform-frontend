@@ -7,7 +7,7 @@ import { Offering } from 'models';
 import VideoPreview from 'tools/VideoPreview';
 
 
-const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering: Offering}> = (props) => {
+const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering?: Offering}> = (props) => {
     const { close, http, onSendOk, useGlobalState, offering, requests } = props;
 
     const { register, handleSubmit, getValues, errors } = useForm<{
@@ -52,7 +52,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                 } = data;
                 http({
                     method: 'PUT',
-                    url: `http://localhost:1337/offerings/${offering.id}`,
+                    url: `http://localhost:1337/offerings/${offering?.id}`,
                     data: {
                         name: title,
                         description,
@@ -86,7 +86,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                 <FormGroup>
                     {offering?.photos.map((img, idx) => {
                         return (
-                            <div style={{ width: 100, height: 100, margin: 5, position: 'relative' }}>
+                            <div key={idx} style={{ width: 100, height: 100, margin: 5, position: 'relative' }}>
                                 <img
                                     alt={img.name}
                                     key={img.id}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Callout, Button } from "@blueprintjs/core";
 import { Offering } from "models";
 import removeMd from 'remove-markdown';
@@ -21,6 +21,8 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const updateUser = () => {
         requests.user.getUser(user?.id);
     }
+
+    const toEdit = user?.offerings.find(o => offeringToEdit?.id === o.id)
 
     return (
         <>
@@ -61,7 +63,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
             })}
             <Preview offering={offering} updateOffering={updateOffering}/>
             {creating ? <Form close={() => updateCreating(false)} onSendOk={updateUser}/>: null}
-            {editing && offeringToEdit ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={offeringToEdit}/>: null}
+            {editing && toEdit ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={toEdit}/>: null}
         </>
     );
 }
