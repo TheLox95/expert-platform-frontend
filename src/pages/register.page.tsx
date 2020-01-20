@@ -13,8 +13,8 @@ const validationSchema = Yup.object({
        .oneOf([Yup.ref('password'), null], 'Passwords must match')
   });
 
-const Form: WrappedComponent<{ close: () => void }> = (props) => {
-    const { useGlobalState, requests } = props;
+const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
+    const { useGlobalState, requests, userType } = props;
     const { register, handleSubmit, errors } = useForm({ validationSchema })
     const [ user ] = useGlobalState('user');
 
@@ -35,7 +35,7 @@ const Form: WrappedComponent<{ close: () => void }> = (props) => {
                 email,
                 password,
             } = data;
-            requests.user.register(username,email,password, 'expert')
+            requests.user.register(username,email,password, userType)
         })}>
             <h3>Register</h3>
 

@@ -40,7 +40,12 @@ const Main: WrappedComponent = (props) => {
             <Route exact path="/search" component={OfferingsDirectory} />
             <Route exact path="/profile/:id" component={Profile} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
+            <Route exact path="/register/expert">
+                <Register userType="expert"/>
+            </Route>
+            <Route exact path="/register/client">
+                <Register userType="client"/>
+            </Route>
             <ProtectedRoute>
                 <Route exact path="/dashboard" component={Dashboard} />
             </ProtectedRoute>

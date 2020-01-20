@@ -60,11 +60,18 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
 
                 <Button type="submit" id="submit-input">Login</Button>
             </form>
-            <Callout style={{ marginTop: '1rem'}}>
-                <Link to="/register">
-                    <Button fill={true} id="submit-input">Register</Button>
-                </Link>
-            </Callout>
+            <div style={{ display: 'flex', marginTop: '1rem'}}>
+                <Callout style={{ marginRight: '0.5rem' }}>
+                    <Link to="/register/expert">
+                        <Button fill={true} id="submit-input">Register as Expert</Button>
+                    </Link>
+                </Callout>
+                <Callout style={{ marginLeft: '0.5rem' }}>
+                    <Link to="/register/client">
+                        <Button fill={true} id="submit-input">Register as Client</Button>
+                    </Link>
+                </Callout>
+            </div>
         </>
     );
 }
