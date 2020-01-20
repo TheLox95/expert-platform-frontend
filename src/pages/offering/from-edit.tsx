@@ -83,7 +83,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                     <div className="bp3-form-helper-text">{errors.description && 'Description is required'}</div>
                 </div>
 
-                <FormGroup>
+                <FormGroup contentClassName='flex'>
                     {offering?.photos.map((img, idx) => {
                         return (
                             <div key={idx} style={{ width: 100, height: 100, margin: 5, position: 'relative' }}>
@@ -105,7 +105,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                     })}
                 </FormGroup>
 
-                <FormGroup>
+                <FormGroup contentClassName='flex'>
                     {offering?.videos.map((video, idx) => <VideoPreview video={video} canDelete={true} key={idx}/> )}
                 </FormGroup>
                 
