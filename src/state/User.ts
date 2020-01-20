@@ -34,7 +34,7 @@ export default (p: GlobalProps) => ({
             p.http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data),
         ])
         .then(axios.spread((user, offerings, opinions) => {
-            offerings = offerings.map((o: Offering) => {
+            offerings = offerings.filter((o: Offering) => o.user.id === user.id).map((o: Offering) => {
                 o.photos = o.photos.filter((p: Photo) => p.hasOwnProperty('id'))
                 o.videos = o.videos.filter((v: Video) => v.hasOwnProperty('id'))
                 return o;
