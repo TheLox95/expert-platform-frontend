@@ -1,6 +1,6 @@
 import axios from "axios"
 import { GlobalProps } from "./wrapper"
-import { Offering, Opinion, Photo, Video } from "models"
+import { Offering, Opinion, Photo, Video, User } from "models"
 
 export default (p: GlobalProps) => ({
     logout: () => {

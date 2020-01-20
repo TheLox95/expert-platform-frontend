@@ -2,6 +2,23 @@ import { GlobalProps } from "./wrapper"
 import { User, Offering } from 'models'
 
 export default (p: GlobalProps) => ({
+    create: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[]) => {
+        return p.http({
+            method: 'POST',
+            url: 'http://localhost:1337/offerings',
+            data: {
+                name: title,
+                description,
+                user: user?.id,
+                photos: uploadedPhotos.map(f => f.id),
+                videos: uploadedVideos.map(f => f.id)
+            }
+        }).then(r => {
+            p.requests.user.getUser()
+            p.dispatch({ type: 'success', payload: `Offering ${title} was created!`})
+            return r.data
+        })
+    },
     update: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[], offering: Offering) => {
         return p.http({
             method: 'PUT',

@@ -4,8 +4,8 @@ import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
 import UploadManager from './UploadManager';
 
-const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (props) => {
-    const { close, http, onSendOk, useGlobalState } = props;
+const Form: WrappedComponent<{ close: () => void }> = (props) => {
+    const { close, useGlobalState, requests } = props;
     const { register, handleSubmit, getValues, errors } = useForm()
     const [ photos, updatePhotos ] = useState<File[]>([]);
     const [ videos, updateVideos ] = useState<File[]>([]);
@@ -18,7 +18,6 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
 
     useEffect(() => {
         if (status === 'SEND') {
-            onSendOk();
             close();
         }
         if (status === 'CANCELLED') {
@@ -34,20 +33,9 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void}> = (prop
                     title,
                     description,
                 } = data;
-                http({
-                    method: 'POST',
-                    url: 'http://localhost:1337/offerings',
-                    data: {
-                        name: title,
-                        description,
-                        user: user?.id,
-                        photos: uploadedPhotos.map(f => f.id),
-                        videos: uploadedVideos.map(f => f.id)
-                    }
-                })
-                .then((r) => {
+                requests.offering.create(title, description, user, uploadedPhotos, uploadedVideos)
+                .then(() => {
                     updateStatus('SEND');
-                    onSendOk();
                     close();
                 });
             })}>

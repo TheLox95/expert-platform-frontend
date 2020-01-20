@@ -19,10 +19,6 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const [ confirm, updateConfirm ] = useState<Offering | null>(null)
     const [ user ] = useGlobalState('user');
 
-    const updateUser = () => {
-        requests.user.getUser(user?.id);
-    }
-
     const toEdit = user?.offerings.find(o => offeringToEdit?.id === o.id)
 
     return (
@@ -68,7 +64,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
                 );
             })}
             <Preview offering={offering} updateOffering={updateOffering}/>
-            {creating ? <Form close={() => updateCreating(false)} onSendOk={updateUser}/>: null}
+            {creating ? <Form close={() => updateCreating(false)} />: null}
             {editing && toEdit ? <FormEdit close={() => updateEditing(false)} offering={toEdit}/>: null}
         </>
     );
