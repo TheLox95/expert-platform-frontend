@@ -2,8 +2,22 @@ import axios from "axios"
 import { GlobalProps } from "./wrapper"
 import { Offering, Opinion, Photo, Video } from "models"
 
-export default (p: GlobalProps) => ({
-    register: (username: string, email: string, password: string, role: string) => {
+const UserRequest = (p: GlobalProps) => {
+    const update = (photos: any[], videos: any[]) => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+        return p.http({
+            url: `http://localhost:1337/users/${user.id}`,
+            method: 'put',
+            data: {
+                photos: [ ...user.photos.map((p: any) => p.id), ...photos.map((p: any) => p.id) ],
+                videos: [ ...user.videos.map((p: any) => p.id), ...videos.map((p: any) => p.id) ],
+            }
+        })
+        .then(() => getUser())
+    }
+    
+    const register = (username: string, email: string, password: string, role: string) => {
         p.http({
             url: 'http://localhost:1337/auth/local/register',
             method: 'post',
@@ -22,11 +36,13 @@ export default (p: GlobalProps) => ({
             p.dispatch({ type: 'user', payload: (response.data as any).user})
             localStorage.setItem('token', (response.data as any).jwt)
         })
-    },
-    logout: () => {
+    };
+    
+    const logout = () => {
         p.dispatch({ type: 'logout' })
-    },
-    getUser: () => {
+    };
+    
+    const getUser = () => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         return p.All([
             p.http({ method: 'get', url: `http://localhost:1337/users/${user.id}` }).then(r => r.data),
@@ -39,7 +55,7 @@ export default (p: GlobalProps) => ({
                 o.videos = o.videos.filter((v: Video) => v.hasOwnProperty('id'))
                 return o;
             })
-
+    
             offerings = (offerings as Offering[]).map((offering: Offering) => {
                 offering.opinions = offering.opinions.map(originalOpinion => {
                     return (opinions as Opinion[]).filter((fullOpiniion: Opinion) => {
@@ -51,6 +67,8 @@ export default (p: GlobalProps) => ({
                 }).flat()
                 return offering;
             })
+            user.photos = user.photos.filter((p: Photo) => p.hasOwnProperty('id'))
+            user.videos = user.videos.filter((p: Video) => p.hasOwnProperty('id'))
             user = {
                 ...user,
                 offerings
@@ -58,4 +76,13 @@ export default (p: GlobalProps) => ({
             p.dispatch({ type: 'user', payload: user })
         }))
     }
-})
+
+    return {
+        update,
+        register,
+        logout,
+        getUser
+    }
+}
+
+export default UserRequest;
