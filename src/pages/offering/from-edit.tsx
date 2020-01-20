@@ -7,7 +7,7 @@ import { Offering } from 'models';
 import VideoPreview from 'tools/VideoPreview';
 
 
-const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering?: Offering}> = (props) => {
+const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering: Offering}> = (props) => {
     const { close, http, onSendOk, useGlobalState, offering, requests } = props;
 
     const { register, handleSubmit, getValues, errors } = useForm<{
@@ -17,8 +17,8 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
         videos: Iterable<File>,
     }>({
         defaultValues: {
-            title: offering?.name,
-            description: offering?.description,
+            title: offering.name,
+            description: offering.description,
             photos: [],
             videos: [],
         }
@@ -52,13 +52,13 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                 } = data;
                 http({
                     method: 'PUT',
-                    url: `http://localhost:1337/offerings/${offering?.id}`,
+                    url: `http://localhost:1337/offerings/${offering.id}`,
                     data: {
                         name: title,
                         description,
                         user: user?.id,
-                        photos: uploadedPhotos.map(f => f.id),
-                        videos: uploadedVideos.map(f => f.id)
+                        photos: [ ...uploadedPhotos.map(f => f.id), ...offering.photos.map(p => p.id) ],
+                        videos: [ ...uploadedVideos.map(f => f.id), ...offering.videos.map(p => p.id) ],
                     }
                 })
                 .then((r) => {
@@ -84,7 +84,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                 </div>
 
                 <FormGroup contentClassName='flex'>
-                    {offering?.photos.map((img, idx) => {
+                    {offering.photos.map((img, idx) => {
                         return (
                             <div key={idx} style={{ width: 100, height: 100, margin: 5, position: 'relative' }}>
                                 <img
@@ -106,7 +106,7 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                 </FormGroup>
 
                 <FormGroup contentClassName='flex'>
-                    {offering?.videos.map((video, idx) => <VideoPreview video={video} canDelete={true} key={idx}/> )}
+                    {offering.videos.map((video, idx) => <VideoPreview video={video} canDelete={true} key={idx}/> )}
                 </FormGroup>
                 
                 <FormGroup>
