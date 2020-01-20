@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, ErrorMessage } from 'react-hook-form'
 import * as Yup from 'yup';
 import { wrapper, WrappedComponent } from 'state'
-import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
-import UploadManager from 'tools/UploadManager';
+import { Classes, Intent, Button } from "@blueprintjs/core";
 import { Redirect } from 'react-router-dom';
 
 const validationSchema = Yup.object({

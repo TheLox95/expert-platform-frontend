@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Alert, IconName, Intent } from '@blueprintjs/core';
+import React from 'react';
+import { Alert, Intent } from '@blueprintjs/core';
 
 interface Props {
     message: string,

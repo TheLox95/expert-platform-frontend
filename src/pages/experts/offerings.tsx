@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Callout, Button } from "@blueprintjs/core";
 import { Offering } from "models";
 import removeMd from 'remove-markdown';

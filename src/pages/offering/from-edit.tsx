@@ -8,7 +8,7 @@ import VideoPreview from 'tools/VideoPreview';
 
 
 const Form: WrappedComponent<{ close: () => void, offering: Offering}> = (props) => {
-    const { close, http, useGlobalState, offering, requests } = props;
+    const { close, useGlobalState, offering, requests } = props;
 
     const { register, handleSubmit, getValues, errors } = useForm<{
         title: string,
