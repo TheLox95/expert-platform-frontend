@@ -7,8 +7,8 @@ import { Offering } from 'models';
 import VideoPreview from 'tools/VideoPreview';
 
 
-const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering: Offering}> = (props) => {
-    const { close, http, onSendOk, useGlobalState, offering, requests } = props;
+const Form: WrappedComponent<{ close: () => void, offering: Offering}> = (props) => {
+    const { close, http, useGlobalState, offering, requests } = props;
 
     const { register, handleSubmit, getValues, errors } = useForm<{
         title: string,
@@ -34,7 +34,6 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
 
     useEffect(() => {
         if (status === 'SEND') {
-            onSendOk();
             close();
         }
         if (status === 'CANCELLED') {
@@ -50,18 +49,15 @@ const Form: WrappedComponent<{ close: () => void, onSendOk: () => void, offering
                     title,
                     description,
                 } = data;
-                http({
-                    method: 'PUT',
-                    url: `http://localhost:1337/offerings/${offering.id}`,
-                    data: {
-                        name: title,
-                        description,
-                        user: user?.id,
-                        photos: [ ...uploadedPhotos.map(f => f.id), ...offering.photos.map(p => p.id) ],
-                        videos: [ ...uploadedVideos.map(f => f.id), ...offering.videos.map(p => p.id) ],
-                    }
-                })
-                .then((r) => {
+                requests.offering.update(
+                    title,
+                    description,
+                    user,
+                    uploadedPhotos,
+                    uploadedVideos,
+                    offering
+                )
+                .then(() => {
                     updateStatus('SEND')
                 });
             })}>

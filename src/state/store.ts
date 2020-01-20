@@ -30,6 +30,8 @@ const reducer = (state:InitialState, action: DispatchInterface) => {
           }
         return { ...state, user: action.payload};
       }
+      case 'success': 
+        return { ...state, success: action.payload };
       case 'logout': {
         localStorage.removeItem('user')
         localStorage.removeItem('token')

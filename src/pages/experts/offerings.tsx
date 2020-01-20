@@ -63,7 +63,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
             })}
             <Preview offering={offering} updateOffering={updateOffering}/>
             {creating ? <Form close={() => updateCreating(false)} onSendOk={updateUser}/>: null}
-            {editing && toEdit ? <FormEdit close={() => updateEditing(false)} onSendOk={updateUser} offering={toEdit}/>: null}
+            {editing && toEdit ? <FormEdit close={() => updateEditing(false)} offering={toEdit}/>: null}
         </>
     );
 }
