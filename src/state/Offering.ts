@@ -19,8 +19,12 @@ export default (p: GlobalProps) => ({
             p.dispatch({ type: 'success', payload: `Offering ${title} was updated!`})
         });
     },
-    delete: (id: number) => {
-        return p.http({ method: 'delete', url: `http://localhost:1337/offerings/${id}` })
-        .then(r => r.data)
+    delete: (offering: Offering) => {
+        return p.http({ method: 'delete', url: `http://localhost:1337/offerings/${offering.id}` })
+        .then(r => {
+            p.requests.user.getUser()
+            p.dispatch({ type: 'success', payload: `Offering ${offering.name} deleted!`})
+            return r.data;
+        })
     }
 })
