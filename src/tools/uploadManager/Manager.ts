@@ -1,14 +1,14 @@
 import { AxiosPromise } from "axios";
 import resolveAll from 'promise.allsettled';
 import uploadFile from "./UploadFile";
-import { AllInterface, HttpInstance } from "state/http";
+import { AllInterface, HttpInstance } from "requests";
 
 export default class UploadManager {
     hasStarted = false
     uploadedFiles: Array<{ id: number, name: string, wasUploaded?: boolean }> = [];
     instances: Array<() => AxiosPromise> = [];
 
-    constructor(public all: AllInterface, public http: HttpInstance, public onDelete: (file: File) => void) {}
+    constructor(public all: AllInterface, public http: HttpInstance<unknown>, public onDelete: (file: File) => void) {}
 
     getFile(name: string) {
         return this.uploadedFiles.find(f => f.name === name)

@@ -1,4 +1,4 @@
-import { GlobalProps } from "./wrapper"
+import { GlobalProps } from "state/wrapper"
 
 export default (p: GlobalProps) => ({
     delete: (id: number) => {

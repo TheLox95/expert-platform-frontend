@@ -1,19 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosPromise } from 'axios';
+import HttpInstance from './HttpInstance';
+import AllInterface from './AllInterface';
 
 let instance: ( (config: AxiosRequestConfig) => AxiosPromise ) | null = null
-
-export interface HttpInstance<T = {}> {
-  (config: AxiosRequestConfig & { disableGLobal?: boolean }): AxiosPromise<T>
-}
-
-export interface AllInterface {
-  (config: AxiosPromise[]): Promise<AxiosResponse<any>[]>
-  (config: Promise<any>[]): Promise<any[]>
-}
-
-export interface HttpInterface extends AxiosInstance {
-  All: AllInterface;
-}
 
 export default <P>(updateLoading: unknown, updateError: unknown): { instance: HttpInstance<P>, All: AllInterface } => {
   const responseInterceptor = (response: AxiosResponse) => {

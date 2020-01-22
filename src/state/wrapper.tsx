@@ -2,11 +2,9 @@ import { Dispatch } from 'react-hooks-global-state';
 import React from 'react';
 import { useGlobalState as getGlobalState, UseGlobalState, dispatch, DispatchInterface } from "./store";
 import actions, { Actions } from "./actions";
-import http, { HttpInstance, AllInterface } from "./http";
+import { http, HttpInstance, AllInterface } from "requests";
 import { WrappedComponent } from 'state';
-import User from './User';
-import Offering from './Offering';
-import File from './File';
+import { User, Offering, File } from 'requests';
 
 export interface GlobalProps<T ={}> {
   useGlobalState: UseGlobalState

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GlobalProps } from "./wrapper"
+import { GlobalProps } from "state/wrapper"
 import { Offering, Opinion, Photo, Video } from "models"
 
 const UserRequest = (p: GlobalProps) => {

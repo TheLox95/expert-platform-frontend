@@ -1,4 +1,4 @@
-import { GlobalProps } from "./wrapper"
+import { GlobalProps } from "state/wrapper"
 import { User, Offering } from 'models'
 
 export default (p: GlobalProps) => ({

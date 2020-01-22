@@ -1,6 +1,6 @@
-import { HttpInstance } from "state/http"
+import { HttpInstance } from "requests"
 
-const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
+const uploadFile = (http: HttpInstance<unknown>, file: File, onProgress: (v: number) => void) => {
     const data = new FormData()
     data.append('files', file)
 
