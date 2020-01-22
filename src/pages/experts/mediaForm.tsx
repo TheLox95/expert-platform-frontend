@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup, Icon } from "@blueprintjs/core";
-import UploadManager from 'tools/UploadManager';
+import { UploadManager, VideoPreview} from 'tools';
 import { User } from 'models';
-import VideoPreview from 'tools/VideoPreview';
 
 
 const MediaForm: WrappedComponent<{ close: () => void, user: User}> = (props) => {

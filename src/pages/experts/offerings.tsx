@@ -6,8 +6,7 @@ import Preview from './offeringPreview';
 import Form from 'pages/offering/from';
 import FormEdit from 'pages/offering/from-edit';
 import { wrapper, WrappedComponent } from 'state';
-import HoverIcon from 'tools/HoverIcon';
-import ConfirmAction from 'tools/ConfirmAction';
+import { HoverIcon, ConfirmAction} from 'tools';
 
 const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
     const { useGlobalState, requests } = props;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 import { wrapper, WrappedComponent } from 'state'
 import { Overlay, Classes, Intent, Button, FormGroup } from "@blueprintjs/core";
-import UploadManager from 'tools/UploadManager';
+import { UploadManager } from 'tools';
 
 const Form: WrappedComponent<{ close: () => void }> = (props) => {
     const { close, useGlobalState, requests } = props;

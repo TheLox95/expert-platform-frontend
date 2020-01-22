@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Toaster, Toast, Position, Intent } from "@blueprintjs/core";
 import { Route, useLocation } from "react-router-dom";
-import { ProtectedRoute, wrapper, WrappedComponent } from "state";
+import { ProtectedRoutes, wrapper, WrappedComponent } from "state";
 import OfferingsDirectory from 'pages/offering/offerings-directory.page';
 import Profile from 'pages/experts/profile.page';
 import Login from 'pages/login.page';
@@ -46,9 +46,9 @@ const Main: WrappedComponent = (props) => {
             <Route exact path="/register/client">
                 <Register userType="client"/>
             </Route>
-            <ProtectedRoute>
+            <ProtectedRoutes>
                 <Route exact path="/dashboard" component={Dashboard} />
-            </ProtectedRoute>
+            </ProtectedRoutes>
         </main>
     );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { GlobalStateProvider, useGlobalState } from "./store";
 import wrapper, { GlobalProps as GlobalP } from "./wrapper";
 import actions from "./actions";
-import ProtectedRoute from "./ProtectedRoutes";
+import { ProtectedRoutes } from "tools";
 
 import Login from "./LoginState";
 import NonLogin from "./NonLoginState";
@@ -28,7 +28,7 @@ export {
     useGlobalState,
     wrapper,
     actions,
-    ProtectedRoute,
+    ProtectedRoutes,
 }
 
 export type WrappedComponent<T = {}> = React.ComponentType<GlobalP<T> & T>;

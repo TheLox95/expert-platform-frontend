@@ -1,37 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Progress from '../pages/offering/Progres';
-import { wrapper, WrappedComponent } from 'state';
-import { AxiosPromise } from 'axios';
-import { HttpInstance, AllInterface } from 'state/http';
+import { AxiosPromise } from "axios";
 import resolveAll from 'promise.allsettled';
+import uploadFile from "./UploadFile";
+import { AllInterface, HttpInstance } from "state/http";
 
-const uploadFile = (http: HttpInstance, file: File, onProgress: (v: number) => void) => {
-    const data = new FormData()
-    data.append('files', file)
-
-    return () => {
-        return http({
-            disableGLobal: true,
-            url: 'http://localhost:1337/upload',
-            method: 'post',
-            data,
-            onUploadProgress: function(progressEvent ) {
-                var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                onProgress(percentCompleted)
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        .catch((err) => {
-            onProgress(-1)
-            throw file;
-        })
-    }
-}
-
-
-class UploadManager {
+export default class UploadManager {
     hasStarted = false
     uploadedFiles: Array<{ id: number, name: string, wasUploaded?: boolean }> = [];
     instances: Array<() => AxiosPromise> = [];
@@ -90,29 +62,3 @@ class UploadManager {
         }
     }
 }
-
-const Manager: WrappedComponent<{ files: File[], wasSend: string, onDelete: (file: File) => void ,onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
-    const { files, wasSend, All, http, onUploadedFiles, onDelete } = props;
-    const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http, onDelete));
-
-    useEffect(() => {
-        if (files.length !== 0) {
-            managerInstance.start(onUploadedFiles);
-        }
-    }, [files.length]);
-
-    useEffect(() => {
-        if (wasSend === 'CANCELLED') {
-            managerInstance.clear()
-        } 
-    }, [wasSend]);
-    return (
-        <>
-            {files.map(f => {
-                return <Progress key={f.name} manager={managerInstance} file={f} />
-            })}
-        </>
-    );
-}
-
-export default wrapper(Manager);
