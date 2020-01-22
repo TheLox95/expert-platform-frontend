@@ -1,15 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosPromise } from 'axios';
 
-let options = {}
-let instance: AxiosInstance | null = null
-
-if (localStorage.getItem('token') !== null) {
-  options = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  }
-}
+let instance: ( (config: AxiosRequestConfig) => AxiosPromise ) | null = null
 
 export interface HttpInstance<T = {}> {
   (config: AxiosRequestConfig & { disableGLobal?: boolean }): AxiosPromise<T>
@@ -100,9 +91,19 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
   }
 
   if (instance === null) {
-    instance = axios.create(options);
-    instance.interceptors.request.use(requestInterceptor)
-    instance.interceptors.response.use(responseInterceptor, errorInterceptor)
+    instance = (config: AxiosRequestConfig) => {
+      const authHeader = localStorage.getItem('token') !== null ? {Authorization: `Bearer ${localStorage.getItem('token')}`} : {}
+
+      return axios({
+        ...config,
+        headers: {
+          ...config.headers,
+          ...authHeader
+        }
+      })
+    };
+    axios.interceptors.request.use(requestInterceptor)
+    axios.interceptors.response.use(responseInterceptor, errorInterceptor)
     return { instance, All };
   } else {
     return { instance, All };
