@@ -22,7 +22,9 @@ const obj = {
 
         return (
             <>
-                <Popover content={<NotificationList notifications={notifications}/>} target={<TagComponent notifications={notifications}/>} />
+                {user?.role.type !== 'client' ? null : (
+                    <Popover content={<NotificationList notifications={notifications}/>} target={<TagComponent notifications={notifications}/>} />
+                )}                
 
                 <Link to="/dashboard" >
                     <Button className={Classes.MINIMAL} icon="dashboard" text="Dashboard" />

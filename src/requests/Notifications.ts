@@ -9,6 +9,10 @@ const NotificationRequest = (p: GlobalProps) => {
             return
         }
 
+        if (JSON.parse(user).role.type !== 'client') {
+            return
+        }
+
         return p.http({
             url: `http://localhost:1337/offerings/following`,
             method: 'get',

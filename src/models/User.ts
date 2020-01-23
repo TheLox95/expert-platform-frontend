@@ -9,7 +9,12 @@ export interface User {
     provider: string;
     confirmed: boolean;
     blocked: boolean;
-    role: number;
+    role: {
+        id: number,
+        name: string,
+        description: string,
+        type: string
+    };
     aboutme: string;
     created_at: Date;
     updated_at: Date;
