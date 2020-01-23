@@ -14,15 +14,17 @@ const NotificationList: WrappedComponent<{ notifications: Notification[]}> = ({ 
     }, []);
 
     return (
-        <Card>
+        <>
             {notifications.map(n => {
                 return (
-                    <Link key={n.id} to={`/offering/${n.offering.id}`}>
-                        <Text>{n.offering.name}</Text>
-                    </Link>
+                    <Card>
+                        <Link key={n.id} to={`/offering/${n.offering.id}`}>
+                            <Text>{n.offering.name}</Text>
+                        </Link>
+                    </Card>
                 );
             })}
-        </Card>
+        </>
     );
 }
 
