@@ -1,5 +1,5 @@
 import { createStore, UseGlobalState as Global } from 'react-hooks-global-state';
-import { User, Offering } from 'models';
+import { User, Offering, Notification } from 'models';
 
 export interface InitialState {
     loading: boolean,
@@ -8,6 +8,7 @@ export interface InitialState {
     success: string | null,
     searchTerm: null | string,
     user: User | null
+    notifications: Notification[]
 }
 
 const initialState: InitialState = { 
@@ -16,7 +17,8 @@ const initialState: InitialState = {
     error: null,
     success: null,
     searchTerm: null,
-    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null,
+    notifications: []
 };
 
 export type DispatchInterface = {type: string, payload?: any};
@@ -30,6 +32,8 @@ const reducer = (state:InitialState, action: DispatchInterface) => {
           }
         return { ...state, user: action.payload};
       }
+      case 'notifications': 
+        return { ...state, notifications: action.payload };
       case 'success': 
         return { ...state, success: action.payload };
       case 'logout': {

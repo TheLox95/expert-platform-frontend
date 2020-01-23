@@ -4,7 +4,7 @@ import { default as AllInterface_ } from './AllInterface';
 
 export { default as File } from './File';
 export { default as Offering } from './Offering';
-export { default as User } from './Offering';
+export { default as User } from './User';
 export { default as http } from './http';
 
 export type HttpInstance<T> = HttpInstance_<T>;

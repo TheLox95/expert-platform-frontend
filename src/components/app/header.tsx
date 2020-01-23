@@ -1,5 +1,5 @@
-import React from 'react';
-import { wrapper, SessionFactory } from "state";
+import React, { useEffect } from 'react';
+import { wrapper, SessionFactory, WrappedComponent } from "state";
 import {
     Alignment,
     Button,
@@ -7,24 +7,38 @@ import {
     Navbar,
     NavbarGroup,
     NavbarHeading,
-    InputGroup
+    InputGroup,
+    Tag,
+    Popover
 } from "@blueprintjs/core";
 
 import { Link } from "react-router-dom";
+import { Offering } from 'models';
+import NotificationList from './notificationList';
 
-const Header = (props) => {
-    // const [ searchTerm, setState] = useState('')
-    const { useGlobalState, http } = props;
+const TagComponent: (props: {notifications: { wasRead: boolean }[] }) => JSX.Element = ({notifications }) => (<Tag icon='notifications' interactive={true} >
+{notifications.filter(n => n.wasRead === false ).length}
+</Tag>);
+
+const Header: WrappedComponent = ({ useGlobalState, http, requests }) => {
     const [ , update ] = useGlobalState('results');
+    const [ notifications ] = useGlobalState('notifications');
     const [ searchTerm, updateSearch ] = useGlobalState('searchTerm');
 
-    const send = e => {
+    const send = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         http({url: `http://localhost:1337/offerings?name_contains=${searchTerm}`, method: 'get' }).then(r => {
-            update(r.data)
+            update(r.data as Offering[])
             updateSearch(searchTerm)
         })
     }
+
+    useEffect(() => {
+        requests.user.getNotifications()
+        setInterval(() => {
+            requests.user.getNotifications()
+        }, 10 * 1000)
+    }, []);
 
     return (
         <Navbar id='navbar' className="flex-item">
@@ -32,10 +46,14 @@ const Header = (props) => {
                 <NavbarHeading>Platform</NavbarHeading>
                 <form
                     onSubmit={send}>
-                    <InputGroup type="search" leftIcon={"search"} intent={"primary"} onChange={(e) => updateSearch(e.target.value)} />
+                    <InputGroup type="search" leftIcon={"search"} intent={"primary"} onChange={(e: any) => updateSearch(e.target.value)} />
                 </form>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
+                
+                <Popover content={<NotificationList notifications={notifications}/>} target={<TagComponent notifications={notifications}/>} />
+
+
                 <Link to="/">
                     <Button className={Classes.MINIMAL} icon="home" text="Home" />
                 </Link>

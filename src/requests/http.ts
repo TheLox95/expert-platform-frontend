@@ -2,10 +2,13 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosPromise }
 import HttpInstance from './HttpInstance';
 import AllInterface from './AllInterface';
 
-let instance: ( (config: AxiosRequestConfig) => AxiosPromise ) | null = null
+let instance: ( (config: AxiosRequestConfig & { disableGLobal?: boolean }) => AxiosPromise ) | null = null
 
 export default <P>(updateLoading: unknown, updateError: unknown): { instance: HttpInstance<P>, All: AllInterface } => {
   const responseInterceptor = (response: AxiosResponse) => {
+    if ((response.config as AxiosRequestConfig & { disableGLobal?: boolean }).disableGLobal && (response.config as AxiosRequestConfig & { disableGLobal?: boolean }).disableGLobal === true) {
+      return response;
+    }
     if (typeof updateLoading === 'function') {
       updateLoading(false)
     }
@@ -58,7 +61,10 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
     return Promise.reject(error);
   }
   
-  const requestInterceptor = (config: AxiosRequestConfig) => {
+  const requestInterceptor = (config: AxiosRequestConfig & { disableGLobal?: boolean }) => {
+    if (config.disableGLobal && config.disableGLobal === true) {
+      return config;
+    }
     if (typeof updateLoading === 'function') {
       updateLoading(true)
     }

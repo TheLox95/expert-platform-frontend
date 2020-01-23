@@ -3,6 +3,18 @@ import { GlobalProps } from "state/wrapper"
 import { Offering, Opinion, Photo, Video } from "models"
 
 const UserRequest = (p: GlobalProps) => {
+    const getNotifications = () => {
+    
+        return p.http({
+            url: `http://localhost:1337/offerings/following`,
+            method: 'get',
+            disableGLobal: true
+        })
+        .then((r) => {
+            p.dispatch({ type: 'notifications', payload: r.data })
+        })
+    }
+
     const update = (photos: any[], videos: any[]) => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
     
@@ -81,7 +93,8 @@ const UserRequest = (p: GlobalProps) => {
         update,
         register,
         logout,
-        getUser
+        getUser,
+        getNotifications
     }
 }
 
