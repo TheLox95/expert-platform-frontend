@@ -1,10 +1,14 @@
 import { GlobalProps } from "state/wrapper"
-import { Notification } from "models"
+import { Notification, User } from "models"
 
 const NotificationRequest = (p: GlobalProps) => {
 
     const getNotifications = () => {
-    
+        const user = localStorage.getItem('user');
+        if (!user) {
+            return
+        }
+
         return p.http({
             url: `http://localhost:1337/offerings/following`,
             method: 'get',
