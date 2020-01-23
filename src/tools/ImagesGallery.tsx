@@ -23,7 +23,7 @@ const ImageGallery: React.FunctionComponent<{ images: Photo[] }> = ({ images }) 
             })}
 
             <ImgsViewer
-                imgs={images}
+                imgs={images.map(i => ({ ...i, src: `http://localhost:1337/${i.url}`}))}
                 currImg={currentImgIdx}
                 isOpen={currentImgIdx !== 0}
                 onClickPrev={() => updateCurrentImg(currentImgIdx - 1)}
