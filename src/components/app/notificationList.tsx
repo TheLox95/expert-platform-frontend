@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Notification } from "models";
 import { Text, Card } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';
+import { WrappedComponent, wrapper } from 'state';
 
-const NotificationList: React.FunctionComponent<{ notifications: Notification[]}> = ({ notifications }) => {
+const NotificationList: WrappedComponent<{ notifications: Notification[]}> = ({ notifications, requests }) => {
+
+    useEffect(() => {
+        const nonReadNotifications = notifications.filter(n => n.wasRead !== true)
+
+        requests.notification.readed(nonReadNotifications);
+
+    }, []);
 
     return (
         <Card>
             {notifications.map(n => {
                 return (
-                    <Link to={`/offering/${n.offering.id}`}>
-                        <Text key={n.id}>{n.offering.name}</Text>
+                    <Link key={n.id} to={`/offering/${n.offering.id}`}>
+                        <Text>{n.offering.name}</Text>
                     </Link>
                 );
             })}
@@ -18,4 +26,4 @@ const NotificationList: React.FunctionComponent<{ notifications: Notification[]}
     );
 }
 
-export default NotificationList;
+export default wrapper(NotificationList);

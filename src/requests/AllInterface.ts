@@ -1,7 +1,7 @@
 import { AxiosPromise, AxiosResponse } from "axios";
 
 export default interface AllInterface {
-    (config: AxiosPromise[]): Promise<AxiosResponse<any>[]>
-    (config: Promise<any>[]): Promise<any[]>
+    (promises: AxiosPromise[], config?: { disableGLobal: boolean }): Promise<AxiosResponse<any>[]>
+    (promises: Promise<any>[], config?: { disableGLobal: boolean }): Promise<any[]>
   }
   

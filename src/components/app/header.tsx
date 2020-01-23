@@ -9,16 +9,23 @@ import {
     NavbarHeading,
     InputGroup,
     Tag,
-    Popover
+    Popover,
+    Colors
 } from "@blueprintjs/core";
 
 import { Link } from "react-router-dom";
 import { Offering } from 'models';
 import NotificationList from './notificationList';
 
-const TagComponent: (props: {notifications: { wasRead: boolean }[] }) => JSX.Element = ({notifications }) => (<Tag icon='notifications' interactive={true} >
-{notifications.filter(n => n.wasRead === false ).length}
-</Tag>);
+const TagComponent: (props: {notifications: { wasRead: boolean }[] }) => JSX.Element = ({notifications }) => {
+    const readedNotifications = notifications.filter(n => n.wasRead === false )
+    const style = { backgroundColor: readedNotifications.length === 0 ? Colors.GRAY2: Colors.BLUE2 }
+    return (
+        <Tag icon='notifications' interactive={true} style={style}>
+            {readedNotifications.length === 0 ? '' : readedNotifications.length}
+        </Tag>
+    );
+};
 
 const Header: WrappedComponent = ({ useGlobalState, http, requests }) => {
     const [ , update ] = useGlobalState('results');
@@ -34,9 +41,9 @@ const Header: WrappedComponent = ({ useGlobalState, http, requests }) => {
     }
 
     useEffect(() => {
-        requests.user.getNotifications()
+        requests.notification.getNotifications()
         setInterval(() => {
-            requests.user.getNotifications()
+            requests.notification.getNotifications()
         }, 10 * 1000)
     }, []);
 

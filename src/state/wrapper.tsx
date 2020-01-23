@@ -4,7 +4,7 @@ import { useGlobalState as getGlobalState, UseGlobalState, dispatch, DispatchInt
 import actions, { Actions } from "./actions";
 import { http, HttpInstance, AllInterface } from "requests";
 import { WrappedComponent } from 'state';
-import { User, Offering, File } from 'requests';
+import { User, Offering, File, Notification } from 'requests';
 
 export interface GlobalProps<T ={}> {
   useGlobalState: UseGlobalState
@@ -33,11 +33,13 @@ export default <P extends {}>(Wrapped: WrappedComponent<P>) => (props: React.Pro
   const user = User(p)
   const offering = Offering(p)
   const file = File(p)
+  const notification = Notification(p)
 
   const requests = {
-    user: User({ ...p, requests: { user, offering, file }}),
-    offering: Offering({ ...p, requests: { user, offering, file }}),
-    file: File({ ...p, requests: { user, offering, file }})
+    user: User({ ...p, requests: { user, offering, file, notification }}),
+    offering: Offering({ ...p, requests: { user, offering, file, notification }}),
+    file: File({ ...p, requests: { user, offering, file, notification }}),
+    notification: Notification({ ...p, requests: { user, offering, file, notification }})
   }
 
   return <Wrapped {...props} {...p} requests={requests} />

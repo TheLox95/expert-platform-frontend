@@ -72,13 +72,20 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
     return config;
   }
 
-  const All: AllInterface = (requests: Promise<any>[]) => {
-    if (typeof updateLoading === 'function') {
+  const All: AllInterface = (requests: Promise<any>[], config?: { disableGLobal: boolean }) => {
+    let disabled = false;
+    if (config && config.disableGLobal && config.disableGLobal === true) {
+      disabled = true;
+    }
+    if (typeof updateLoading === 'function' && disabled === false) {
+      console.log('updating 1')
       updateLoading(true)
     }
     return axios.all(requests)
     .then((r) => {
-      if (typeof updateLoading === 'function') {
+      if (typeof updateLoading === 'function' && disabled === false) {
+        console.log('updating 2')
+
         updateLoading(false)
       }
       return r;
