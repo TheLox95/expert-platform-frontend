@@ -8,28 +8,13 @@ import {
     NavbarGroup,
     NavbarHeading,
     InputGroup,
-    Tag,
-    Popover,
-    Colors
 } from "@blueprintjs/core";
 
 import { Link } from "react-router-dom";
 import { Offering } from 'models';
-import NotificationList from './notificationList';
-
-const TagComponent: (props: {notifications: { wasRead: boolean }[] }) => JSX.Element = ({notifications }) => {
-    const readedNotifications = notifications.filter(n => n.wasRead === false )
-    const style = { backgroundColor: readedNotifications.length === 0 ? Colors.GRAY2: Colors.BLUE2 }
-    return (
-        <Tag icon='notifications' interactive={true} style={style}>
-            {readedNotifications.length === 0 ? '' : readedNotifications.length}
-        </Tag>
-    );
-};
 
 const Header: WrappedComponent = ({ useGlobalState, http, requests }) => {
     const [ , update ] = useGlobalState('results');
-    const [ notifications ] = useGlobalState('notifications');
     const [ searchTerm, updateSearch ] = useGlobalState('searchTerm');
 
     const send = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,10 +42,6 @@ const Header: WrappedComponent = ({ useGlobalState, http, requests }) => {
                 </form>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-                
-                <Popover content={<NotificationList notifications={notifications}/>} target={<TagComponent notifications={notifications}/>} />
-
-
                 <Link to="/">
                     <Button className={Classes.MINIMAL} icon="home" text="Home" />
                 </Link>
