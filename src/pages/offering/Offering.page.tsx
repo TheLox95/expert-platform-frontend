@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { wrapper, WrappedComponent } from "state";
 import Markdown from 'markdown-to-jsx';
-import { Offering, Photo, Video } from 'models';
+import { Offering, Photo, Video, Opinion } from 'models';
 import { useParams } from 'react-router-dom';
-import { Classes, Card, Tabs, Tab } from '@blueprintjs/core';
+import { Classes, Card, Tabs, Tab, Callout, Tag, Text } from '@blueprintjs/core';
 import { VideoPreview } from 'tools';
 import ImageGallery from 'tools/ImagesGallery';
 
@@ -20,6 +20,29 @@ const Media: React.FunctionComponent<{ images: Photo[], videos: Video[] }> = ({ 
         <>
         <ImageGallery images={images} />
         {videos.map((video, idx) => <VideoPreview video={video} key={idx}/>)}
+        </>
+    );
+}
+
+const Opinions: React.FunctionComponent<{ opinions: Opinion[] }> = ({ opinions }) => {
+    if (opinions.length === 0) {
+        return (
+            <>
+            <Text>No opinions for this offering</Text>
+            </>
+        );
+    }
+    return (
+        <>
+        {opinions.map((o, idx) => {
+            return (
+                <Callout key={idx}>
+                    <Tag>Score {o?.score}</Tag>{' '}
+                    by <span>{typeof o.user === 'object' ? o.user.username : ''}</span>{' '}
+                    <h2>{o?.description}</h2>
+                </Callout>
+            );
+        })}
         </>
     );
 }
@@ -53,6 +76,7 @@ const OfferingComponent: WrappedComponent = ({ requests }) => {
             >
                 <Tab id="Info" title="Info" panel={offering ? <Description offering={offering} /> : undefined} />
                 <Tab id="Media" title="Media" panel={<Media images={offering?.photos ?? []} videos={offering?.videos ?? []} />} />
+                <Tab id="Opinion" title="Opinion" panel={<Opinions opinions={offering?.opinions ?? []} />} />
             </Tabs>
         </Card>
         
