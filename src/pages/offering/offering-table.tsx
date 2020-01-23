@@ -18,7 +18,11 @@ export const OfferingsTable = ( props: { results: Offering[] } ) => {
         <tbody>
             {results && results.map((r) => (
                 <tr key={r.id}>
-                    <td>{r.name}</td>
+                    <td>
+                        <Link to={`/offering/${r.id}`}>
+                            {r.name}
+                        </Link>
+                    </td>
                     <td>{removeMd(r.description).substring(0, 120)}...</td>
                     <td>
                         <Link to={`/profile/${r.user.id}`}>

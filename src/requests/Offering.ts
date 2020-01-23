@@ -2,6 +2,13 @@ import { GlobalProps } from "state/wrapper"
 import { User, Offering } from 'models'
 
 export default (p: GlobalProps) => ({
+    get: (id: number) => {
+        return p.http({
+            method: 'GET',
+            url: `http://localhost:1337/offerings/${id}`,
+        }).then(r => r.data)
+
+    },
     create: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[]) => {
         return p.http({
             method: 'POST',
