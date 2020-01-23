@@ -78,14 +78,11 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
       disabled = true;
     }
     if (typeof updateLoading === 'function' && disabled === false) {
-      console.log('updating 1')
       updateLoading(true)
     }
     return axios.all(requests)
     .then((r) => {
       if (typeof updateLoading === 'function' && disabled === false) {
-        console.log('updating 2')
-
         updateLoading(false)
       }
       return r;
