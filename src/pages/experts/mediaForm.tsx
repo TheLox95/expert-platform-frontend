@@ -7,9 +7,9 @@ import { User } from 'models';
 
 
 const MediaForm: WrappedComponent<{ close: () => void, user: User}> = (props) => {
-    const { close, useGlobalState, user, requests } = props;
+    const { close, user, requests } = props;
 
-    const { register, handleSubmit, getValues, errors } = useForm<{
+    const { register, handleSubmit, getValues } = useForm<{
         photos: Iterable<File>,
         videos: Iterable<File>,
     }>({

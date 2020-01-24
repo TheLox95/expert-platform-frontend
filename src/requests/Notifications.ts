@@ -1,5 +1,5 @@
 import { GlobalProps } from "state/wrapper"
-import { Notification, User } from "models"
+import { Notification } from "models"
 
 const NotificationRequest = (p: GlobalProps) => {
 

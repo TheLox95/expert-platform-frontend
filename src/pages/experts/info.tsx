@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-// @ts-ignore
-import ImgsViewer from 'react-images-viewer'
 import { VideoPreview, HoverIcon} from 'tools';
 import { WrappedComponent, wrapper } from 'state';
 import { User } from 'models';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { wrapper, WrappedComponent } from "state";
-import { Callout, Popover, Button, Intent, Tag } from "@blueprintjs/core";
+import { Callout, Popover, Tag } from "@blueprintjs/core";
 
 const Footer: WrappedComponent = ({ useGlobalState }) => {
     const [ lang, updateLang ] = useGlobalState('lang');

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance, AxiosPromise } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosPromise } from 'axios';
 import HttpInstance from './HttpInstance';
 import AllInterface from './AllInterface';
 
