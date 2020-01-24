@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { GlobalProps, wrapper } from "state";
+import { GlobalProps, wrapper, WrappedComponent } from "state";
 import { Text, Button, Classes, Popover, Colors, Tag } from "@blueprintjs/core";
 import NotificationList from 'components/app/notificationList';
 
-const obj = {
-    LoginButton: (props: GlobalProps) => {
-        const { useGlobalState, requests } = props;
+const obj: {LoginButton: WrappedComponent} = {
+    LoginButton: ({ useGlobalState, requests, i18n }) => {
         const [ user ] = useGlobalState('user');
         const [ notifications ] = useGlobalState('notifications');
 
@@ -27,13 +26,13 @@ const obj = {
                 )}                
 
                 <Link to="/dashboard" >
-                    <Button className={Classes.MINIMAL} icon="dashboard" text="Dashboard" />
+                    <Button className={Classes.MINIMAL} icon="dashboard" text={i18n.t('header-dashboard')} />
                 </Link>
                 <Text>Hi {user?.username}!</Text>
                 <Button
                     className={Classes.MINIMAL}
                     icon="log-out"
-                    text="Logout"
+                    text={i18n.t('header-logout')}
                     onClick={() => requests.user.logout()}
                 />
             </>

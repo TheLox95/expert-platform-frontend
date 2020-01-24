@@ -1,37 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import { wrapper } from "state";
+import { wrapper, WrappedComponent } from "state";
 import { Tabs, Tab, Card, Classes } from "@blueprintjs/core";
 import { useParams } from "react-router-dom";
 import Offerings from "./offerings"
 import Info from "./info"
 import Opinions from "./opinions"
+import { HttpInstance } from 'requests';
+import { Offering, Opinion, User } from 'models';
 
-const getUser = (id, http) => http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data)
-const getOfferings = (http) => http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data)
-const getOpinions = (http) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
+const getUser = (id: string, http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data)
+const getOfferings = (http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data)
+const getOpinions = (http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
 
-const Profile = (prop) => {
+const Profile: WrappedComponent = ({ http, useGlobalState, i18n }) => {
     const { id } = useParams();
-    const { http, useGlobalState } = prop;
     const [tab, updateTab] = useState("Info");
     const [ loggedUser, updateLoggedUser ] = useGlobalState('user');
 
     useEffect(() => {
         axios.all([
-            getUser(id, http),
+            getUser(id || '1', http),
             getOfferings(http),
             getOpinions(http)
         ])
         .then(axios.spread((user, offerings, opinions) => {
-            offerings = offerings.map(offering => {
+            offerings = (offerings as Offering[]).map(offering => {
                 offering.opinions = offering.opinions.map(originalOpinion => {
-                    return opinions.filter(fullOpiniion => fullOpiniion.user.id === originalOpinion.user)
+                    return (opinions as Opinion[]).filter(fullOpiniion => {
+                        if (typeof fullOpiniion.user === 'object') {
+                            return fullOpiniion.user.id === originalOpinion.user
+                        }
+                    })
                 }).flat()
                 return offering;
             })
-            updateLoggedUser(user)
+            updateLoggedUser(user as User)
         }))
     }, [id, http]);
 
@@ -51,13 +56,13 @@ const Profile = (prop) => {
                 animate={true}
                 id="navbar"
                 large={false}
-                onChange={(id) => updateTab(id)}
+                onChange={(id) => updateTab(id as string)}
                 renderActiveTabPanelOnly={true}
                 selectedTabId={tab}
             >
-                <Tab id="Info" title="Info" panel={loggedUser ? <Info user={loggedUser}/> : null} />
-                <Tab id="Offerings" title="Offerings" panel={<Offerings user={loggedUser}/>} />
-                <Tab id="Opinions" title="Opinions" panel={<Opinions user={loggedUser}/>} />
+                <Tab id="Info" title={i18n.t('info')} panel={<Info user={loggedUser}/>} />
+                <Tab id="Offerings" title={i18n.t('offerings')} panel={<Offerings/>} />
+                <Tab id="Opinions" title={i18n.t('opinions')} panel={<Opinions user={loggedUser}/>} />
             </Tabs>
         </Card>
         </>

@@ -3,16 +3,15 @@ import { HTMLTable, Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { Offering } from "models";
 import removeMd from 'remove-markdown';
+import { WrappedComponent, wrapper } from 'state';
 
-export const OfferingsTable = ( props: { results: Offering[] } ) => {
-    const { results } = props;
-
+export const OfferingsTable: WrappedComponent<{ results: Offering[] }> = ({ results, i18n }) => {
     return (<HTMLTable style={{ width: '100%' }}>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Expert</th>
+                <th>{i18n.t('offering-table-name')}</th>
+                <th>{i18n.t('offering-table-description')}</th>
+                <th>{i18n.t('offering-table-expert')}</th>
             </tr>
         </thead>
         <tbody>
@@ -37,4 +36,4 @@ export const OfferingsTable = ( props: { results: Offering[] } ) => {
     </HTMLTable>)
 }
 
-export default OfferingsTable
+export default wrapper(OfferingsTable);

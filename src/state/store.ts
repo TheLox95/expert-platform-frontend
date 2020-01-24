@@ -8,7 +8,9 @@ export interface InitialState {
     success: string | null,
     searchTerm: null | string,
     user: User | null
-    notifications: Notification[]
+    notifications: Notification[],
+    lang: 'en' | 'es',
+    availableLangs: ['en', 'es']
 }
 
 const initialState: InitialState = { 
@@ -18,7 +20,9 @@ const initialState: InitialState = {
     success: null,
     searchTerm: null,
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null,
-    notifications: []
+    notifications: [],
+    lang: 'en',
+    availableLangs: ['en', 'es']
 };
 
 export type DispatchInterface = {type: string, payload?: any};

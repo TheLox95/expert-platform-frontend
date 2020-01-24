@@ -4,8 +4,7 @@ import { wrapper, WrappedComponent } from "state";
 import { FormGroup, InputGroup, Button, Callout } from "@blueprintjs/core";
 import { User } from 'models';
 
-const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
-    const { http, useGlobalState } = prop
+const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalState, i18n }) => {
     const [ user, updateUser ] = useGlobalState('user');
     const [ username, updateUsername ] = useState('');
     const [ password, updatePassword ] = useState('');
@@ -45,17 +44,17 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
         <>
             <form onSubmit={send} id="login-from">
                 <FormGroup
-                    label="Username or email"
+                    label={i18n.t('login-identifier')}
                     labelFor="user-input"
                 >
-                    <InputGroup id="user-input" placeholder="Username or email" onChange={(e: React.FormEvent<HTMLInputElement>) => updateUsername(e.currentTarget.value)} />
+                    <InputGroup id="user-input" placeholder={i18n.t('login-identifier')} onChange={(e: React.FormEvent<HTMLInputElement>) => updateUsername(e.currentTarget.value)} />
                 </FormGroup>
 
                 <FormGroup
-                    label="Password"
+                    label={i18n.t('login-password')}
                     labelFor="password-input"
                 >
-                    <InputGroup type="password" id="password-input" placeholder="Password" onChange={(e: React.FormEvent<HTMLInputElement>) => updatePassword(e.currentTarget.value)} />
+                    <InputGroup type="password" id="password-input" placeholder={i18n.t('login-password')} onChange={(e: React.FormEvent<HTMLInputElement>) => updatePassword(e.currentTarget.value)} />
                 </FormGroup>
 
                 <Button type="submit" id="submit-input">Login</Button>
@@ -63,12 +62,12 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = (prop) => {
             <div style={{ display: 'flex', marginTop: '1rem'}}>
                 <Callout style={{ marginRight: '0.5rem' }}>
                     <Link to="/register/expert">
-                        <Button fill={true} id="submit-input">Register as Expert</Button>
+                        <Button fill={true} id="submit-input">{i18n.t('register-expert')}</Button>
                     </Link>
                 </Callout>
                 <Callout style={{ marginLeft: '0.5rem' }}>
                     <Link to="/register/client">
-                        <Button fill={true} id="submit-input">Register as Client</Button>
+                        <Button fill={true} id="submit-input">{i18n.t('register-client')}</Button>
                     </Link>
                 </Callout>
             </div>

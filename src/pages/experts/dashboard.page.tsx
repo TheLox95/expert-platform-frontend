@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
-import { wrapper } from "state";
+import { wrapper, WrappedComponent } from "state";
 import { Tabs, Tab, Card, Classes, EditableText, Button, Intent } from "@blueprintjs/core";
 import Offerings from "./offerings"
 import Info from "./info"
 import Opinions from "./opinions"
 
-const Profile = (prop) => {
-    const { http, useGlobalState, requests } = prop;
+const Profile: WrappedComponent = ({ http, useGlobalState, requests, i18n }) => {
     const [ currentUser ] = useGlobalState('user');
     const [ , updateSuccess ] = useGlobalState('success');
     
@@ -17,10 +16,11 @@ const Profile = (prop) => {
     const [ aboutme, updateAboutme ] = useState("");
 
     useEffect(() => {
-        requests.user.getUser(currentUser.id)
+        requests.user.getUser(currentUser?.id)
     }, []);
 
-    const update = (id) => () =>{
+    const update = (id?: number) => () =>{
+        if (!id) return;
         const data = { username, aboutme }
         http({ method: 'put', url: `http://localhost:1337/users/${id}`, data })
         .then(() => {updateIsEditing(false); updateSuccess('Information updated!')});
@@ -44,20 +44,20 @@ const Profile = (prop) => {
                     )}
                 </p>
             </div>
-            {isEditing ? <Button intent={Intent.PRIMARY} onClick={update(currentUser.id)} style={{ marginLeft: 'auto', alignSelf: 'start'}} text="Update"/> : null}
+            {isEditing ? <Button intent={Intent.PRIMARY} onClick={update(currentUser?.id)} style={{ marginLeft: 'auto', alignSelf: 'start'}} text="Update"/> : null}
         </Card>
         <Card style={{ height: 'auto' }}>
             <Tabs
                 animate={true}
                 id="navbar"
                 large={false}
-                onChange={(id) => updateTab(id)}
+                onChange={(id) => updateTab(id as string)}
                 renderActiveTabPanelOnly={true}
                 selectedTabId={tab}
             >
-                <Tab id="Info" title="Info" panel={currentUser ? <Info user={currentUser}/> : null} />
-                <Tab id="Offerings" title="Offerings" panel={<Offerings user={currentUser}/>} />
-                <Tab id="Opinions" title="Opinions" panel={<Opinions user={currentUser}/>} />
+                <Tab id="Info" title={i18n.t('info')} panel={<Info user={currentUser}/>} />
+                <Tab id="Offerings" title={i18n.t('offerings')} panel={<Offerings />} />
+                <Tab id="Opinions" title={i18n.t('opinions')} panel={<Opinions user={currentUser}/>} />
             </Tabs>
         </Card>
         </>

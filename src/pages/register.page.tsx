@@ -14,7 +14,7 @@ const validationSchema = Yup.object({
   });
 
 const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
-    const { useGlobalState, requests, userType } = props;
+    const { useGlobalState, requests, userType, i18n } = props;
     const { register, handleSubmit, errors } = useForm({ validationSchema })
     const [ user ] = useGlobalState('user');
 
@@ -37,12 +37,12 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
             } = data;
             requests.user.register(username,email,password, userType)
         })}>
-            <h3>Register</h3>
+            <h3>{i18n.t('register')}</h3>
 
             <div className="bp3-form-group">
-                <label className="bp3-label" htmlFor="username-input">Username</label>
+                <label className="bp3-label" htmlFor="username-input">{i18n.t('username')}</label>
                 <div className="bp3-input-group">
-                <input type="text" className={`${errors.username ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="username-input" name='username' placeholder="Username" ref={register({ required: true })}/>
+                <input type="text" className={`${errors.username ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="username-input" name='username' placeholder={i18n.t('username')} ref={register({ required: true })}/>
                 </div>
                 <div className="bp3-form-helper-text">
                     <ErrorMessage errors={errors} name="username" />
@@ -50,9 +50,9 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
             </div>
 
             <div className="bp3-form-group">
-                <label className="bp3-label" htmlFor="email-input">Email</label>
+                <label className="bp3-label" htmlFor="email-input">{i18n.t('email')}</label>
                 <div className="bp3-input-group">
-                <input type="text" className={`${errors.email ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="email-input" name='email' placeholder="Email" ref={register({ required: true })}/>
+                <input type="text" className={`${errors.email ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="email-input" name='email' placeholder={i18n.t('email')} ref={register({ required: true })}/>
                 </div>
                 <div className="bp3-form-helper-text">
                     <ErrorMessage errors={errors} name="email" />
@@ -60,9 +60,9 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
             </div>
 
             <div className="bp3-form-group">
-                <label className="bp3-label" htmlFor="password-input">Password</label>
+                <label className="bp3-label" htmlFor="password-input">{i18n.t('password')}</label>
                 <div className="bp3-input-group">
-                <input type="password" className={`${errors.password ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'password-input'} name='password' placeholder="Password" ref={register({ required: true })}/>
+                <input type="password" className={`${errors.password ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'password-input'} name='password' placeholder={i18n.t('password')} ref={register({ required: true })}/>
                 </div>
                 <div className="bp3-form-helper-text">
                     <ErrorMessage errors={errors} name="password" />
@@ -70,9 +70,9 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
             </div>
 
             <div className="bp3-form-group">
-                <label className="bp3-label" htmlFor="password-confirmation-input">Repeat Password</label>
+                <label className="bp3-label" htmlFor="password-confirmation-input">{i18n.t('repeat-password')}</label>
                 <div className="bp3-input-group">
-                <input type="password" className={`${errors.passwordConfirmation ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'password-confirmation-input'} name='passwordConfirmation' placeholder="Repeat Password" ref={register({ required: true })}/>
+                <input type="password" className={`${errors.passwordConfirmation ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'password-confirmation-input'} name='passwordConfirmation' placeholder={i18n.t('repeat-password')} ref={register({ required: true })}/>
                 </div>
                 <div className="bp3-form-helper-text">
                     <ErrorMessage errors={errors} name="passwordConfirmation" />
@@ -82,10 +82,10 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
             <br />
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
                 <Button intent={Intent.DANGER} onClick={() => updateStatus('CANCELLED')} style={{ margin: "" }}>
-                    Go back
+                    {i18n.t('go-back')}
                 </Button>
                 <Button type='submit' style={{ margin: "" }}>
-                    Submit
+                    {i18n.t('submit')}
                 </Button>
             </div>
         </form>

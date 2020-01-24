@@ -8,8 +8,7 @@ import FormEdit from 'pages/offering/from-edit';
 import { wrapper, WrappedComponent } from 'state';
 import { HoverIcon, ConfirmAction} from 'tools';
 
-const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
-    const { useGlobalState, requests } = props;
+const Offerings: WrappedComponent<{ canAdd?: boolean }> = ({ useGlobalState, requests, i18n }) => {
     const [ offering, updateOffering ] = useState<Offering | null>(null)
     const [ creating, updateCreating ] = useState(false)
     const [ editing, updateEditing ] = useState(false)
@@ -32,7 +31,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = (props) => {
                 />
             )}
             <Callout style={{ marginBottom: '0.5rem'}}>
-                <Button fill={true} large={true} text={"Add new"} onClick={() => updateCreating(true)}/>
+                <Button fill={true} large={true} text={i18n.t('offering-create')} onClick={() => updateCreating(true)}/>
             </Callout>
             {user?.offerings.map((o, idx) => {
                 return (

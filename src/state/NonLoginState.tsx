@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { wrapper } from "state";
+import { wrapper, WrappedComponent } from "state";
 import { Button, Classes } from "@blueprintjs/core";
 
-const obj = {
-    LoginButton: () => {
+const obj: {LoginButton: WrappedComponent} = {
+    LoginButton: ({ i18n }) => {
         return <Link to="/login">
-            <Button className={Classes.MINIMAL} icon="document" text="Login" />
+            <Button className={Classes.MINIMAL} icon="document" text={i18n.t('header-login')} />
         </Link>
     }
 }

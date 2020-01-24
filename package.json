@@ -12,6 +12,7 @@
     "@types/remove-markdown": "^0.1.1",
     "@types/yup": "^0.26.27",
     "axios": "^0.19.0",
+    "i18next": "^19.0.3",
     "markdown-to-jsx": "^6.10.3",
     "promise.allsettled": "^1.0.2",
     "react": "^16.12.0",
