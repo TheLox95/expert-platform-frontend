@@ -10,7 +10,7 @@ export const Home: WrappedComponent = ( props ) => {
     useEffect(() => {
         const CancelToken = axios.CancelToken;
         const source = CancelToken.source();
-        http({url: 'http://localhost:1337/offerings?_sort=created_at:DESC', method: 'get', cancelToken: source.token })
+        http({url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:DESC`, method: 'get', cancelToken: source.token })
         .then(r => {
             updateResult(r.data as [])
         })

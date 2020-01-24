@@ -10,9 +10,9 @@ import Opinions from "./opinions"
 import { HttpInstance } from 'requests';
 import { Offering, Opinion, User } from 'models';
 
-const getUser = (id: string, http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/users/${id}` }).then(r => r.data)
-const getOfferings = (http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data)
-const getOpinions = (http: HttpInstance<{}>) => http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data)
+const getUser = (id: string, http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}` }).then(r => r.data)
+const getOfferings = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data)
+const getOpinions = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data)
 
 const Profile: WrappedComponent = ({ http, useGlobalState, i18n }) => {
     const { id } = useParams();

@@ -22,7 +22,7 @@ const Profile: WrappedComponent = ({ http, useGlobalState, requests, i18n }) => 
     const update = (id?: number) => () =>{
         if (!id) return;
         const data = { username, aboutme }
-        http({ method: 'put', url: `http://localhost:1337/users/${id}`, data })
+        http({ method: 'put', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}`, data })
         .then(() => {updateIsEditing(false); updateSuccess('Information updated!')});
     }
 

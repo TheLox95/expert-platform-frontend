@@ -8,7 +8,7 @@ const UserRequest = (p: GlobalProps) => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
     
         return p.http({
-            url: `http://localhost:1337/users/${user.id}`,
+            url: `${process.env.REACT_APP_BACKEND_URL}/users/${user.id}`,
             method: 'put',
             data: {
                 photos: [ ...user.photos.map((p: any) => p.id), ...photos.map((p: any) => p.id) ],
@@ -20,7 +20,7 @@ const UserRequest = (p: GlobalProps) => {
     
     const register = (username: string, email: string, password: string, role: string) => {
         p.http({
-            url: 'http://localhost:1337/auth/local/register',
+            url: `${process.env.REACT_APP_BACKEND_URL}/auth/local/register`,
             method: 'post',
             data: {
                 username,
@@ -46,9 +46,9 @@ const UserRequest = (p: GlobalProps) => {
     const getUser = () => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         return p.All([
-            p.http({ method: 'get', url: `http://localhost:1337/users/${user.id}` }).then(r => r.data),
-            p.http({ method: 'get', url: `http://localhost:1337/offerings?_sort=created_at:desc` }).then(r => r.data),
-            p.http({ method: 'get', url: `http://localhost:1337/opinions` }).then(r => r.data),
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${user.id}` }).then(r => r.data),
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data),
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data),
         ])
         .then(axios.spread((user, offerings, opinions) => {
             offerings = offerings.filter((o: Offering) => o.user.id === user.id).map((o: Offering) => {

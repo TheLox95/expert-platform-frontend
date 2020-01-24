@@ -19,7 +19,7 @@ const Header: WrappedComponent = ({ useGlobalState, http, requests, i18n }) => {
 
     const send = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        http({url: `http://localhost:1337/offerings?name_contains=${searchTerm}`, method: 'get' }).then(r => {
+        http({url: `${process.env.REACT_APP_BACKEND_URL}/offerings?name_contains=${searchTerm}`, method: 'get' }).then(r => {
             update(r.data as Offering[])
             updateSearch(searchTerm)
         })

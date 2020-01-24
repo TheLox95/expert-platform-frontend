@@ -17,7 +17,7 @@ const VideoPreview: WrappedComponent<{ video: Video, canDelete?: boolean }> = (p
                 src={'/play-button.png'}
                 style={{ width: 100, height: 100 }}
                 onClick={() => {
-                    updateVideo(`http://localhost:1337${video.url}`);
+                    updateVideo(`${process.env.REACT_APP_BACKEND_URL}${video.url}`);
                 }}
             />
             {!canDelete ? null: (

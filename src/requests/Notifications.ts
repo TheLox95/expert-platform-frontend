@@ -14,7 +14,7 @@ const NotificationRequest = (p: GlobalProps) => {
         }
 
         return p.http({
-            url: `http://localhost:1337/offerings/following`,
+            url: `${process.env.REACT_APP_BACKEND_URL}/offerings/following`,
             method: 'get',
             disableGLobal: true
         })
@@ -28,7 +28,7 @@ const NotificationRequest = (p: GlobalProps) => {
         p.All(notifications.map(n => {
             return p.http({
                 disableGLobal: true,
-                url: `http://localhost:1337/notifications/${n.id}`,
+                url: `${process.env.REACT_APP_BACKEND_URL}/notifications/${n.id}`,
                 method: 'put',
                 data: { wasRead: true }
             })

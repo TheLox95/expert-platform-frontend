@@ -5,14 +5,14 @@ export default (p: GlobalProps) => ({
     get: (id: number) => {
         return p.http({
             method: 'GET',
-            url: `http://localhost:1337/offerings/${id}`,
+            url: `${process.env.REACT_APP_BACKEND_URL}/offerings/${id}`,
         }).then(r => r.data)
 
     },
     create: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[]) => {
         return p.http({
             method: 'POST',
-            url: 'http://localhost:1337/offerings',
+            url: `${process.env.REACT_APP_BACKEND_URL}/offerings`,
             data: {
                 name: title,
                 description,
@@ -29,7 +29,7 @@ export default (p: GlobalProps) => ({
     update: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[], offering: Offering) => {
         return p.http({
             method: 'PUT',
-            url: `http://localhost:1337/offerings/${offering.id}`,
+            url: `${process.env.REACT_APP_BACKEND_URL}/offerings/${offering.id}`,
             data: {
                 name: title,
                 description,
@@ -44,7 +44,7 @@ export default (p: GlobalProps) => ({
         });
     },
     delete: (offering: Offering) => {
-        return p.http({ method: 'delete', url: `http://localhost:1337/offerings/${offering.id}` })
+        return p.http({ method: 'delete', url: `${process.env.REACT_APP_BACKEND_URL}/offerings/${offering.id}` })
         .then(r => {
             p.requests.user.getUser()
             p.dispatch({ type: 'success', payload: `Offering ${offering.name} deleted!`})

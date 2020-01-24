@@ -14,7 +14,7 @@ const ImageGallery: React.FunctionComponent<{ images: Photo[] }> = ({ images }) 
                 return <img
                     alt={img.name}
                     key={img.url}
-                    src={`http://localhost:1337/${img.url}`}
+                    src={`${process.env.REACT_APP_BACKEND_URL}/${img.url}`}
                     style={{ width: 100, height: 100, margin: 5 }}
                     onClick={() => {
                         updateCurrentImg(idx)
@@ -23,7 +23,7 @@ const ImageGallery: React.FunctionComponent<{ images: Photo[] }> = ({ images }) 
             })}
 
             <ImgsViewer
-                imgs={images.map(i => ({ ...i, src: `http://localhost:1337/${i.url}`}))}
+                imgs={images.map(i => ({ ...i, src: `${process.env.REACT_APP_BACKEND_URL}/${i.url}`}))}
                 currImg={currentImgIdx}
                 isOpen={currentImgIdx !== 0}
                 onClickPrev={() => updateCurrentImg(currentImgIdx - 1)}

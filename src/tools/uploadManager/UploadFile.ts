@@ -7,7 +7,7 @@ const uploadFile = (http: HttpInstance<unknown>, file: File, onProgress: (v: num
     return () => {
         return http({
             disableGLobal: true,
-            url: 'http://localhost:1337/upload',
+            url: `${process.env.REACT_APP_BACKEND_URL}/upload`,
             method: 'post',
             data,
             onUploadProgress: function(progressEvent: {loaded: number, total: number} ) {

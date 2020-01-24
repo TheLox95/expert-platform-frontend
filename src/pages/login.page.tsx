@@ -12,7 +12,7 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalS
     const send = (e: React.FormEvent) => {
         e.preventDefault();
         http({
-            url: 'http://localhost:1337/auth/local', 
+            url: `${process.env.REACT_APP_BACKEND_URL}/auth/local`, 
             method: 'post',
             data: {
                 identifier: username,

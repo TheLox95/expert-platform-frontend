@@ -84,7 +84,7 @@ const Form: WrappedComponent<{ close: () => void, offering: Offering}> = (props)
                                 <img
                                     alt={img.name}
                                     key={img.id}
-                                    src={`http://localhost:1337${img.url}`}
+                                    src={`${process.env.REACT_APP_BACKEND_URL}${img.url}`}
                                     style={{ width: 100, height: 100 }}
                                 />
                                 <Icon
