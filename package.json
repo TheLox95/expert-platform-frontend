@@ -7,6 +7,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/node": "^13.1.6",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
     "@types/markdown-to-jsx": "^6.9.1",
     "@types/promise.allsettled": "^1.0.2",
     "@types/remove-markdown": "^0.1.1",
@@ -49,9 +52,6 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^13.1.6",
-    "@types/react": "^16.9.17",
-    "@types/react-dom": "^16.9.4",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "jest-puppeteer": "^4.4.0",
