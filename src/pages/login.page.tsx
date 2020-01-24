@@ -57,7 +57,7 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalS
                     <InputGroup type="password" id="password-input" placeholder={i18n.t('login-password')} onChange={(e: React.FormEvent<HTMLInputElement>) => updatePassword(e.currentTarget.value)} />
                 </FormGroup>
 
-                <Button type="submit" id="submit-input">Login</Button>
+                <Button type="submit" id="submit-input">{i18n.t('login-button')}</Button>
             </form>
             <div style={{ display: 'flex', marginTop: '1rem'}}>
                 <Callout style={{ marginRight: '0.5rem' }}>
