@@ -24,7 +24,7 @@ const Main: WrappedComponent = (props) => {
     },[location, update])
 
     return (
-        <main style={{ height: '100%', padding: '2rem' }} className="flex-item">
+        <main style={{ height: '100%', padding: '2rem', flex: 1 }} className="flex-item">
             { error && (
                 <Toaster position={Position.TOP}>
                     {/* "Toasted!" will appear here after clicking button. */}
