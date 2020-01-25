@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer } from "@blueprintjs/core";
 import Markdown from 'markdown-to-jsx';
+import { wrapper, WrappedComponent } from 'state';
+import { Offering } from 'models';
 
-export default function OfferingPreview(props){
-    const { offering, updateOffering } = props;
-
+const OfferingPreview: WrappedComponent<{offering: Offering, updateOffering: (o: Offering | null) => void}> = ({ offering, updateOffering }) => {
     return (
         <Drawer
             isOpen={offering !== null}
@@ -18,3 +18,5 @@ export default function OfferingPreview(props){
         </Drawer>
     );
 }
+
+export default wrapper(OfferingPreview);

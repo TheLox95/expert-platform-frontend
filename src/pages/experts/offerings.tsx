@@ -61,7 +61,7 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = ({ useGlobalState, req
                     </Callout>
                 );
             })}
-            <Preview offering={offering} updateOffering={updateOffering}/>
+            {!offering ? null: <Preview offering={offering} updateOffering={updateOffering}/>}
             {creating ? <Form close={() => updateCreating(false)} />: null}
             {editing && toEdit ? <FormEdit close={() => updateEditing(false)} offering={toEdit}/>: null}
         </>
