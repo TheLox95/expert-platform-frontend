@@ -5,8 +5,8 @@ export default {
     'header-dashboard': 'Dashboard',
     'header-logout': 'Logout',
 
-    'register-client': 'Register as Expert',
-    'register-expert': 'Register as Client',
+    'register-client': 'Register as Client',
+    'register-expert': 'Register as Expert',
 
     'login-button': 'Login',
     'login-identifier': 'Username or email',

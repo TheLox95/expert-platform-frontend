@@ -5,8 +5,8 @@ export default {
     'header-dashboard': 'Panel',
     'header-logout': 'Cerrar sesion',
 
-    'register-client': 'Registrarse como Experto',
-    'register-expert': 'Registrarse como Client',
+    'register-client': 'Registrarse como Client',
+    'register-expert': 'Registrarse como Experto',
 
     'login-button': 'Iniciar sesion',
     'login-identifier': 'Usuario o correo electronico',
