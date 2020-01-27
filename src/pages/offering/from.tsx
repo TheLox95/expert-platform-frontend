@@ -52,7 +52,7 @@ const Form: WrappedComponent<{ close: () => void }> = (props) => {
                 <div className="bp3-form-group">
                     <label className="bp3-label" htmlFor="description-input">Description</label>
                     <div className="bp3-input-group">
-                    <input type="text" className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'description-input'} name='description' placeholder="Description" ref={register({ required: true })}/>
+                    <textarea className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'description-input'} name='description' placeholder="Description" ref={register({ required: true })}/>
                     </div>
                     <div className="bp3-form-helper-text">{errors.description && 'Description is required'}</div>
                 </div>
