@@ -42,7 +42,7 @@ export default class UploadManager {
     }
 
     clear() {
-        return this.all(this.uploadedFiles.map(file => this.http({ url: `${process.env.REACT_APP_BACKEND_URL}/upload/files/${file.id}`, method: 'delete'})))
+        return this.all(this.uploadedFiles.map(file => this.http({ url: `${process.env.REACT_APP_BACKEND_URL}/offerings/files/${file.id}`, method: 'delete'})))
         .then((r) => {
             this.uploadedFiles = [];
         })
@@ -55,7 +55,7 @@ export default class UploadManager {
             this.uploadedFiles = this.uploadedFiles.filter(f => f.name !== fileToDelete.name);
         }
         if (fileToDelete && fileToDelete.wasUploaded !== false) {
-            this.http({ url: `${process.env.REACT_APP_BACKEND_URL}/upload/files/${fileToDelete.id}`, method: 'delete'})
+            this.http({ url: `${process.env.REACT_APP_BACKEND_URL}/offerings/files/${fileToDelete.id}`, method: 'delete'})
             .then(() => {
                 this.uploadedFiles = this.uploadedFiles.filter(f => f.id !== fileToDelete.id);
             })

@@ -14,7 +14,7 @@ const VideoPreview: WrappedComponent<{ video: Video, canDelete?: boolean }> = (p
             <img
                 alt={video.name}
                 key={video.id}
-                src={'/play-button.png'}
+                src={`${process.env.REACT_APP_BACKEND_URL}${video.thumbnail}`}
                 style={{ width: 100, height: 100 }}
                 onClick={() => {
                     updateVideo(`${process.env.REACT_APP_BACKEND_URL}${video.url}`);

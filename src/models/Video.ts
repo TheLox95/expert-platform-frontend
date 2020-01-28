@@ -7,6 +7,7 @@ export interface Video {
     mime: string;
     size: number;
     url: string;
+    thumbnail: string;
     provider: string;
     provider_metadata?: any;
     created_at: Date;
