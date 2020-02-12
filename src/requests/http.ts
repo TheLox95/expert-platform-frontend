@@ -93,14 +93,6 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
     instance = (config: AxiosRequestConfig) => {
       const authHeader = localStorage.getItem('token') !== null ? {Authorization: `Bearer ${localStorage.getItem('token')}`} : {}
 
-      console.log({
-        ...config,
-        headers: {
-          ...config.headers,
-          ...authHeader
-        }
-      })
-
       return axios({
         ...config,
         headers: {

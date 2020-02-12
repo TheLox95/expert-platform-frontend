@@ -8,8 +8,6 @@ const ImageGallery: React.FunctionComponent<{ images: Photo[] }> = ({ images }) 
 
     const [ currentImgIdx, updateCurrentImg ] = useState(-1);
 
-    console.log(currentImgIdx)
-
     return (
         <>
         {images.map((img, idx) => {

@@ -34,8 +34,8 @@ const UserRequest = (p: GlobalProps) => {
             console.log('Well done!');
             console.log('User profile', (response.data as any).user);
             console.log('User token', (response.data as any).jwt);
-            p.dispatch({ type: 'user', payload: (response.data as any).user})
             localStorage.setItem('token', (response.data as any).jwt)
+            p.dispatch({ type: 'user', payload: (response.data as any).user})
         })
     };
     

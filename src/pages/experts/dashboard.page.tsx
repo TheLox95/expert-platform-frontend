@@ -33,7 +33,7 @@ const Profile: WrappedComponent = ({ http, useGlobalState, requests, i18n }) => 
                 <img src="http://lorempixel.com/200/200/" alt=""/>
             </div>
             <div style={{ marginLeft: '1rem'}}>
-                <h2>
+                <h2 id="dashboard-username">
                     {currentUser === null ? null: (
                         <EditableText onChange={(v) => {updateIsEditing(true);updateUsername(v)}} defaultValue={currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)} />
                     )}

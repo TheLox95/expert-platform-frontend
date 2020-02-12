@@ -63,11 +63,10 @@ describe('Login', () => {
     await page.type("#password-confirmation-input", 'expert123');
     await page.click("#submit-register-input");
 
-    await page.waitForSelector('#profile-card');
-    await page.waitForSelector('#profile-name')
+    await page.waitForSelector('#dashboard-username')
 
     const stringIsIncluded = await page.evaluate(() => {
-      return document?.querySelector('#profile-name')?.textContent
+      return document?.querySelector('#dashboard-username')?.textContent
     });
 
     expect(stringIsIncluded).toBe('Expert')
