@@ -6,7 +6,7 @@ import removeMd from 'remove-markdown';
 import { WrappedComponent, wrapper } from 'state';
 
 export const OfferingsTable: WrappedComponent<{ results: Offering[] }> = ({ results, i18n }) => {
-    return (<HTMLTable style={{ width: '100%' }}>
+    return (<HTMLTable id="offering-table" style={{ width: '100%' }}>
         <thead>
             <tr>
                 <th>{i18n.t('offering-table-name')}</th>

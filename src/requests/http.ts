@@ -80,7 +80,7 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
     if (typeof updateLoading === 'function' && disabled === false) {
       updateLoading(true)
     }
-    return axios.all(requests)
+    return Promise.all(requests)
     .then((r) => {
       if (typeof updateLoading === 'function' && disabled === false) {
         updateLoading(false)
@@ -92,6 +92,14 @@ export default <P>(updateLoading: unknown, updateError: unknown): { instance: Ht
   if (instance === null) {
     instance = (config: AxiosRequestConfig) => {
       const authHeader = localStorage.getItem('token') !== null ? {Authorization: `Bearer ${localStorage.getItem('token')}`} : {}
+
+      console.log({
+        ...config,
+        headers: {
+          ...config.headers,
+          ...authHeader
+        }
+      })
 
       return axios({
         ...config,

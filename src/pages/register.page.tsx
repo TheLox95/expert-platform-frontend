@@ -29,7 +29,7 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(data => {
+        <form id="register-form" onSubmit={handleSubmit(data => {
             const {
                 username,
                 email,
@@ -81,10 +81,10 @@ const Form: WrappedComponent<{ userType: 'expert' | 'client' }> = (props) => {
 
             <br />
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                <Button intent={Intent.DANGER} onClick={() => updateStatus('CANCELLED')} style={{ margin: "" }}>
+                <Button id="cancel-register-input" intent={Intent.DANGER} onClick={() => updateStatus('CANCELLED')} style={{ margin: "" }}>
                     {i18n.t('go-back')}
                 </Button>
-                <Button type='submit' style={{ margin: "" }}>
+                <Button id="submit-register-input" type='submit' style={{ margin: "" }}>
                     {i18n.t('submit')}
                 </Button>
             </div>

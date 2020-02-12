@@ -62,12 +62,12 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalS
             <div style={{ display: 'flex', marginTop: '1rem'}}>
                 <Callout style={{ marginRight: '0.5rem' }}>
                     <Link to="/register/expert">
-                        <Button fill={true} id="submit-input">{i18n.t('register-expert')}</Button>
+                        <Button fill={true} id="register-expert-input">{i18n.t('register-expert')}</Button>
                     </Link>
                 </Callout>
                 <Callout style={{ marginLeft: '0.5rem' }}>
                     <Link to="/register/client">
-                        <Button fill={true} id="submit-input">{i18n.t('register-client')}</Button>
+                        <Button fill={true} id="register-client-input">{i18n.t('register-client')}</Button>
                     </Link>
                 </Callout>
             </div>

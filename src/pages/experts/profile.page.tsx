@@ -42,12 +42,12 @@ const Profile: WrappedComponent = ({ http, useGlobalState, i18n }) => {
 
     return ( loggedUser !== null && loggedUser.role.type !== 'expert') ? <Redirect to="/" /> : (
         <>
-        <Card style={{ display: 'flex', marginBottom: '1.5rem' }} className={loggedUser === null ? Classes.SKELETON: ''}>
+        <Card id='profile-card' style={{ display: 'flex', marginBottom: '1.5rem' }} className={loggedUser === null ? Classes.SKELETON: ''}>
             <div>
                 <img src="http://lorempixel.com/200/200/" alt=""/>
             </div>
             <div style={{ marginLeft: '1rem'}}>
-                <h2>{loggedUser ? loggedUser.username.charAt(0).toUpperCase() + loggedUser.username.slice(1): ''}</h2>
+                <h2 id='profile-name'>{loggedUser ? loggedUser.username.charAt(0).toUpperCase() + loggedUser.username.slice(1): ''}</h2>
                 <p>{loggedUser?.aboutme}</p>
             </div>
         </Card>
