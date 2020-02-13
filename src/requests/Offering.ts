@@ -21,7 +21,7 @@ export default (p: GlobalProps) => ({
                 videos: uploadedVideos.map(f => f.id)
             }
         }).then(r => {
-            p.requests.user.getUser()
+            p.requests.user.refreshUser()
             p.dispatch({ type: 'success', payload: `Offering ${title} was created!`})
             return r.data
         })
@@ -39,14 +39,14 @@ export default (p: GlobalProps) => ({
             }
         })
         .then(() => {
-            p.requests.user.getUser()
+            p.requests.user.refreshUser()
             p.dispatch({ type: 'success', payload: `Offering ${title} was updated!`})
         });
     },
     delete: (offering: Offering) => {
         return p.http({ method: 'delete', url: `${process.env.REACT_APP_BACKEND_URL}/offerings/${offering.id}` })
         .then(r => {
-            p.requests.user.getUser()
+            p.requests.user.refreshUser()
             p.dispatch({ type: 'success', payload: `Offering ${offering.name} deleted!`})
             return r.data;
         })

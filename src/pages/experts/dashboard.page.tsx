@@ -16,7 +16,7 @@ const Profile: WrappedComponent = ({ http, useGlobalState, requests, i18n }) => 
     const [ aboutme, updateAboutme ] = useState("");
 
     useEffect(() => {
-        requests.user.getUser(currentUser?.id)
+        requests.user.refreshUser(currentUser?.id)
     }, []);
 
     const update = (id?: number) => () =>{

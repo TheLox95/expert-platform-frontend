@@ -1,5 +1,5 @@
-describe('Login page', function () {
-    it('Login as Expert', function () {
+describe('Register page', function () {
+    it('Register as Expert', function () {
         cy.server()
         cy.route('GET', '/*').as('all')
 
@@ -27,7 +27,7 @@ describe('Login page', function () {
         cy.get('#header-logout')
     })
 
-    it('Login as Client', function () {
+    it('Register as Client', function () {
         cy.server()
         cy.route('GET', '/*').as('all')
 

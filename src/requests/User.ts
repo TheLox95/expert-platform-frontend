@@ -15,7 +15,7 @@ const UserRequest = (p: GlobalProps) => {
                 videos: [ ...user.videos.map((p: any) => p.id), ...videos.map((p: any) => p.id) ],
             }
         })
-        .then(() => getUser())
+        .then(() => refreshUser())
     }
     
     const register = (username: string, email: string, password: string, role: string) => {
@@ -43,7 +43,7 @@ const UserRequest = (p: GlobalProps) => {
         p.dispatch({ type: 'logout' })
     };
     
-    const getUser = () => {
+    const refreshUser = () => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         return p.All([
             p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${user.id}` }).then(r => r.data),
@@ -78,11 +78,68 @@ const UserRequest = (p: GlobalProps) => {
         }))
     }
 
+    const getUser = (id: string | number) => {
+        return p.All([
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}` }).then(r => r.data),
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data),
+            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data),
+        ])
+        .then(axios.spread((user, offerings, opinions) => {
+            offerings = offerings.filter((o: Offering) => o.user.id === user.id).map((o: Offering) => {
+                o.photos = o.photos.filter((p: Photo) => p.hasOwnProperty('id'))
+                o.videos = o.videos.filter((v: Video) => v.hasOwnProperty('id'))
+                return o;
+            })
+    
+            offerings = (offerings as Offering[]).map((offering: Offering) => {
+                offering.opinions = offering.opinions.map(originalOpinion => {
+                    return (opinions as Opinion[]).filter((fullOpiniion: Opinion) => {
+                        if (typeof fullOpiniion.user === 'object') {
+                            return fullOpiniion.user.id === originalOpinion.user
+                        }
+                        return null;
+                    })
+                }).flat()
+                return offering;
+            })
+            user.photos = user.photos.filter((p: Photo) => p.hasOwnProperty('id'))
+            user.videos = user.videos.filter((p: Video) => p.hasOwnProperty('id'))
+            user = {
+                ...user,
+                offerings
+            }
+            return user;
+        }))
+    }
+
+    const login = (username: string, password:string ) => {
+        return p.http({
+            url: `${process.env.REACT_APP_BACKEND_URL}/auth/local`, 
+            method: 'post',
+            data: {
+                identifier: username,
+                password: password,
+            }
+        }).then((response) => {
+            const user = (response.data as any).user;
+            const jwt = (response.data as any).jwt;
+            // Handle success.
+            console.log('Well done!');
+            console.log('User profile', user);
+            console.log('User token', jwt);
+            localStorage.setItem('user', JSON.stringify(user))
+            localStorage.setItem('token', jwt)
+            return user
+        })
+    }
+
     return {
         update,
         register,
         logout,
-        getUser,
+        refreshUser,
+        login,
+        getUser
     }
 }
 

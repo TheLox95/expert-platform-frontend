@@ -4,35 +4,15 @@ import { wrapper, WrappedComponent } from "state";
 import { FormGroup, InputGroup, Button, Callout } from "@blueprintjs/core";
 import { User } from 'models';
 
-const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalState, i18n }) => {
-    const [ user, updateUser ] = useGlobalState('user');
+const Login: WrappedComponent = ({ http, useGlobalState, i18n, requests }) => {
+    const [ user, setUser ] = useGlobalState('user');
     const [ username, updateUsername ] = useState('');
     const [ password, updatePassword ] = useState('');
 
     const send = (e: React.FormEvent) => {
         e.preventDefault();
-        http({
-            url: `${process.env.REACT_APP_BACKEND_URL}/auth/local`, 
-            method: 'post',
-            data: {
-                identifier: username,
-                password: password,
-            }
-        }).then((response) => {
-            const user = response.data.user;
-            const jwt = response.data.jwt;
-            // Handle success.
-            console.log('Well done!');
-            console.log('User profile', user);
-            console.log('User token', jwt);
-            localStorage.setItem('user', JSON.stringify(user))
-            localStorage.setItem('token', jwt)
-            updateUser(user);
-        })
-        .catch(error => {
-            // Handle error.
-            console.log('An error occurred:', error);
-        });
+        requests.user.login(username, password)
+        .then((u: User) => setUser(u))
     }
 
     if (user) {

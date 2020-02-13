@@ -14,30 +14,14 @@ const getUser = (id: string, http: HttpInstance<{}>) => http({ method: 'get', ur
 const getOfferings = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data)
 const getOpinions = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data)
 
-const Profile: WrappedComponent = ({ http, useGlobalState, i18n }) => {
+const Profile: WrappedComponent = ({ http, useGlobalState, i18n, requests }) => {
     const { id } = useParams();
     const [tab, updateTab] = useState("Info");
-    const [ loggedUser, updateLoggedUser ] = useGlobalState('user');
+    const [ loggedUser, setLoggedUser ] = useGlobalState('user');
 
     useEffect(() => {
-        axios.all([
-            getUser(id || '1', http),
-            getOfferings(http),
-            getOpinions(http)
-        ])
-        .then(axios.spread((user, offerings, opinions) => {
-            offerings = (offerings as Offering[]).map(offering => {
-                offering.opinions = offering.opinions.map(originalOpinion => {
-                    return (opinions as Opinion[]).filter(fullOpiniion => {
-                        if (typeof fullOpiniion.user === 'object') {
-                            return fullOpiniion.user.id === originalOpinion.user
-                        }
-                    })
-                }).flat()
-                return offering;
-            })
-            updateLoggedUser(user as User)
-        }))
+        requests.user.getUser(id)
+        .then((user: User) => setLoggedUser(user))
     }, [id, http]);
 
     return ( loggedUser !== null && loggedUser.role.type !== 'expert') ? <Redirect to="/" /> : (

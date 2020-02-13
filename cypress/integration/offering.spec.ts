@@ -1,5 +1,5 @@
-describe('Login page', function () {
-    it('Login as Expert', function () {
+describe('Offering page', function () {
+    it('Creates Offering', function () {
         cy.server()
         cy.route('GET', '/*').as('all')
         cy.route('DELETE', '/offerings/files/*').as('delete')
@@ -8,14 +8,10 @@ describe('Login page', function () {
 
         cy.get('#login-from')
 
-        cy.get('#register-expert-input').click()
+        cy.get("#user-input").type('nick');
+        cy.get("#password-input").type('nick123');
 
-        cy.get("#username-input").type('expert');
-        cy.get("#email-input").type('expert@mail.com');
-        cy.get("#password-input").type('expert123');
-        cy.get("#password-confirmation-input").type('expert123');
-
-        cy.get("#submit-register-input").click();
+        cy.get("#submit-input").click();
 
         cy.get('#bp3-tab-title_navbar_Offerings').click()
         cy.get('#offering-create-button').click()
