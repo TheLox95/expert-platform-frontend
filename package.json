@@ -39,7 +39,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "e2e": "npx cypress open"
+    "e2e:run": "npx cypress run",
+    "e2e:open": "npx cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { GlobalProps } from "state/wrapper"
 import { Offering, Opinion, Photo, Video, User } from "models"
 

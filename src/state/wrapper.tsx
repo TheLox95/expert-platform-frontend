@@ -9,7 +9,7 @@ import { i18n as i18nInterface } from 'i18next';
 import newHttp from 'requests/http';
 import { AxiosRequestConfig } from 'axios';
 
-export interface GlobalProps<T ={}> {
+export interface GlobalProps {
   useGlobalState: UseGlobalState
   actions: Actions
   http: <A>(config: AxiosRequestConfig & { disableGlobal?: boolean }) => Promise<A>
@@ -25,7 +25,7 @@ export default <P extends {}>(Wrapped: WrappedComponent<P>) => (props: React.Pro
 
   const h = newHttp(updateLoading, updateError)
 
-  const p: GlobalProps<P> = {
+  const p: GlobalProps = {
     useGlobalState: getGlobalState,
     actions: actions,
     http: h,

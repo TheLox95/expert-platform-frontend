@@ -1,5 +1,6 @@
 describe('Login page', function () {
     it('Login as Expert', function () {
+        cy.clearLocalStorage()
         cy.server()
         cy.route('GET', '/*').as('all')
 
@@ -21,6 +22,7 @@ describe('Login page', function () {
     })
 
     it('Login as Client', function () {
+        cy.clearLocalStorage()
         cy.server()
         cy.route('GET', '/*').as('all')
 
