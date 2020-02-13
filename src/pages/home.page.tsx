@@ -5,20 +5,16 @@ import Table from 'pages/offering/offering-table';
 
 export const Home: WrappedComponent = ( props ) => {
     const { http } = props;
-    const [ results, updateResult ] = useState([]);
+    const [ results, setResult ] = useState([]);
 
     useEffect(() => {
-        const CancelToken = axios.CancelToken;
-        const source = CancelToken.source();
-        http({url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:DESC`, method: 'get', cancelToken: source.token })
+        http<[]>({url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:DESC`, method: 'get' })
         .then(r => {
-            updateResult(r.data as [])
+            setResult(r)
         })
         .catch(() => {})
-        return () => {
-            source.cancel();
-        };
-    }, [http]);
+
+    }, []);
 
     return (<Table results={results}></Table>)
 }

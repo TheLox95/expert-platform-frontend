@@ -1,12 +1,12 @@
-import { HttpInstance } from "requests"
+import { HttpFun } from "requests/http"
 
-const uploadFile = (http: HttpInstance<unknown>, file: File, onProgress: (v: number) => void) => {
+const uploadFile = <F>(http: HttpFun, file: File, onProgress: (v: number) => void) => {
     const data = new FormData()
     data.append('files', file)
 
     return () => {
-        return http({
-            disableGLobal: true,
+        return http<F[]>({
+            disableGlobal: true,
             url: `${process.env.REACT_APP_BACKEND_URL}/offerings/upload`,
             method: 'post',
             data,

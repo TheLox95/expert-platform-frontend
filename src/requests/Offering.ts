@@ -6,7 +6,7 @@ export default (p: GlobalProps) => ({
         return p.http({
             method: 'GET',
             url: `${process.env.REACT_APP_BACKEND_URL}/offerings/${id}`,
-        }).then(r => r.data)
+        }).then(r => r)
 
     },
     create: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[]) => {
@@ -23,7 +23,7 @@ export default (p: GlobalProps) => ({
         }).then(r => {
             p.requests.user.refreshUser()
             p.dispatch({ type: 'success', payload: `Offering ${title} was created!`})
-            return r.data
+            return r
         })
     },
     update: (title: string, description: string, user: User, uploadedPhotos: any[], uploadedVideos: any[], offering: Offering) => {
@@ -48,7 +48,7 @@ export default (p: GlobalProps) => ({
         .then(r => {
             p.requests.user.refreshUser()
             p.dispatch({ type: 'success', payload: `Offering ${offering.name} deleted!`})
-            return r.data;
+            return r;
         })
     }
 })

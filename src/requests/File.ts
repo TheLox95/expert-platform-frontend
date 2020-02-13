@@ -5,7 +5,7 @@ export default (p: GlobalProps) => ({
         return p.http({ method: 'delete', url: `${process.env.REACT_APP_BACKEND_URL}/offerings/files/${id}` })
         .then(r => {
             return p.requests.user.refreshUser()
-            .then(() => r.data)
+            .then(() => r)
         })
     },
 })

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { GlobalProps } from "state/wrapper"
-import { Offering, Opinion, Photo, Video } from "models"
+import { Offering, Opinion, Photo, Video, User } from "models"
 
 const UserRequest = (p: GlobalProps) => {
 
@@ -19,7 +19,7 @@ const UserRequest = (p: GlobalProps) => {
     }
     
     const register = (username: string, email: string, password: string, role: string) => {
-        p.http({
+        p.http<{ user: User, jwt: string }>({
             url: `${process.env.REACT_APP_BACKEND_URL}/auth/local/register`,
             method: 'post',
             data: {
@@ -32,10 +32,10 @@ const UserRequest = (p: GlobalProps) => {
         .then(response => {
             // Handle success.
             console.log('Well done!');
-            console.log('User profile', (response.data as any).user);
-            console.log('User token', (response.data as any).jwt);
-            localStorage.setItem('token', (response.data as any).jwt)
-            p.dispatch({ type: 'user', payload: (response.data as any).user})
+            console.log('User profile', response.user);
+            console.log('User token', response.jwt);
+            localStorage.setItem('token', response.jwt)
+            p.dispatch({ type: 'user', payload: response.user})
         })
     };
     
@@ -45,12 +45,12 @@ const UserRequest = (p: GlobalProps) => {
     
     const refreshUser = () => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
-        return p.All([
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${user.id}` }).then(r => r.data),
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data),
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data),
+        return Promise.all([
+            p.http<User>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${user.id}` }),
+            p.http<Offering[]>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }),
+            p.http<Opinion[]>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }),
         ])
-        .then(axios.spread((user, offerings, opinions) => {
+        .then(([user, offerings, opinions]) => {
             offerings = offerings.filter((o: Offering) => o.user.id === user.id).map((o: Offering) => {
                 o.photos = o.photos.filter((p: Photo) => p.hasOwnProperty('id'))
                 o.videos = o.videos.filter((v: Video) => v.hasOwnProperty('id'))
@@ -75,16 +75,16 @@ const UserRequest = (p: GlobalProps) => {
                 offerings
             }
             p.dispatch({ type: 'user', payload: user })
-        }))
+        })
     }
 
     const getUser = (id: string | number) => {
-        return p.All([
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}` }).then(r => r.data),
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data),
-            p.http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data),
+        return Promise.all([
+            p.http<User>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}` }),
+            p.http<Offering[]>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }),
+            p.http<Opinion[]>({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }),
         ])
-        .then(axios.spread((user, offerings, opinions) => {
+        .then(([user, offerings, opinions]) => {
             offerings = offerings.filter((o: Offering) => o.user.id === user.id).map((o: Offering) => {
                 o.photos = o.photos.filter((p: Photo) => p.hasOwnProperty('id'))
                 o.videos = o.videos.filter((v: Video) => v.hasOwnProperty('id'))
@@ -109,11 +109,11 @@ const UserRequest = (p: GlobalProps) => {
                 offerings
             }
             return user;
-        }))
+        })
     }
 
     const login = (username: string, password:string ) => {
-        return p.http({
+        return p.http<{ user: User, jwt: string }>({
             url: `${process.env.REACT_APP_BACKEND_URL}/auth/local`, 
             method: 'post',
             data: {
@@ -121,8 +121,8 @@ const UserRequest = (p: GlobalProps) => {
                 password: password,
             }
         }).then((response) => {
-            const user = (response.data as any).user;
-            const jwt = (response.data as any).jwt;
+            const user = response.user;
+            const jwt = response.jwt;
             // Handle success.
             console.log('Well done!');
             console.log('User profile', user);

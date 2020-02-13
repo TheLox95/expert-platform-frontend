@@ -16,23 +16,23 @@ const NotificationRequest = (p: GlobalProps) => {
         return p.http({
             url: `${process.env.REACT_APP_BACKEND_URL}/offerings/following`,
             method: 'get',
-            disableGLobal: true
+            disableGlobal: true
         })
         .then((r) => {
-            p.dispatch({ type: 'notifications', payload: r.data })
+            p.dispatch({ type: 'notifications', payload: r })
         })
     }
 
     const readed = (notifications: Notification[]) => {
 
-        p.All(notifications.map(n => {
+        Promise.all(notifications.map(n => {
             return p.http({
-                disableGLobal: true,
+                disableGlobal: true,
                 url: `${process.env.REACT_APP_BACKEND_URL}/notifications/${n.id}`,
                 method: 'put',
-                data: { wasRead: true }
+                data: { wasRead: true },
             })
-        }), { disableGLobal: true })
+        }))
         .then(() => getNotifications());
     }
 

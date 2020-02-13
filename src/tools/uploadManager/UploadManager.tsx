@@ -4,8 +4,8 @@ import { wrapper, WrappedComponent } from 'state';
 import UploadManager from './Manager';
 
 const Manager: WrappedComponent<{ files: File[], wasSend: string, onDelete: (file: File) => void ,onUploadedFiles: (uploaded: {}[]) => void }> = (props) => {
-    const { files, wasSend, All, http, onUploadedFiles, onDelete } = props;
-    const [ managerInstance ] = useState<UploadManager>(new UploadManager(All, http, onDelete));
+    const { files, wasSend, http, onUploadedFiles, onDelete } = props;
+    const [ managerInstance ] = useState(new UploadManager(http, onDelete));
 
     useEffect(() => {
         if (files.length !== 0) {

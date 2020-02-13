@@ -1,21 +1,22 @@
 import { AxiosPromise } from "axios";
 import resolveAll from 'promise.allsettled';
 import uploadFile from "./UploadFile";
-import { AllInterface, HttpInstance } from "requests";
+import { AllInterface } from "requests";
+import { HttpFun } from "requests/http";
 
-export default class UploadManager {
+export default class UploadManager<F extends { id: number, name: string, wasUploaded?: boolean } > {
     hasStarted = false
     uploadedFiles: Array<{ id: number, name: string, wasUploaded?: boolean }> = [];
-    instances: Array<() => AxiosPromise> = [];
+    instances: Array<() => Promise<F[]>> = [];
 
-    constructor(public all: AllInterface, public http: HttpInstance<unknown>, public onDelete: (file: File) => void) {}
+    constructor(public http: HttpFun, public onDelete: (file: File) => void) {}
 
     getFile(name: string) {
         return this.uploadedFiles.find(f => f.name === name)
     }
 
     getHttp(file: File, onProgress: (v: number) => void) {
-        const i = uploadFile(this.http, file, onProgress);
+        const i = uploadFile<F>(this.http, file, onProgress);
         this.instances.push(i)
         return this;
     }
@@ -27,7 +28,7 @@ export default class UploadManager {
             .then((results) => {
                 results.forEach(promiseResult => {
                     if (promiseResult.status === 'fulfilled') {
-                        this.uploadedFiles = [ ...this.uploadedFiles, ...promiseResult.value.data]
+                        this.uploadedFiles = [ ...this.uploadedFiles, ...promiseResult.value]
                         onUploadedFiles(this.uploadedFiles)
                     } else {
                         if (promiseResult.reason instanceof File) {
@@ -42,7 +43,7 @@ export default class UploadManager {
     }
 
     clear() {
-        return this.all(this.uploadedFiles.map(file => this.http({ url: `${process.env.REACT_APP_BACKEND_URL}/offerings/files/${file.id}`, method: 'delete'})))
+        return Promise.all(this.uploadedFiles.map(file => this.http({ disableGlobal: true, url: `${process.env.REACT_APP_BACKEND_URL}/offerings/files/${file.id}`, method: 'delete'})))
         .then((r) => {
             this.uploadedFiles = [];
         })
