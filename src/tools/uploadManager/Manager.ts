@@ -1,7 +1,5 @@
-import { AxiosPromise } from "axios";
 import resolveAll from 'promise.allsettled';
 import uploadFile from "./UploadFile";
-import { AllInterface } from "requests";
 import { HttpFun } from "requests/http";
 
 export default class UploadManager<F extends { id: number, name: string, wasUploaded?: boolean } > {

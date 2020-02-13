@@ -2,7 +2,7 @@ import { Dispatch } from 'react-hooks-global-state';
 import React from 'react';
 import { useGlobalState as getGlobalState, UseGlobalState, dispatch, DispatchInterface } from "./store";
 import actions, { Actions } from "./actions";
-import { AllInterface, User, Offering, File, Notification } from "requests";
+import { User, Offering, File, Notification } from "requests";
 import { WrappedComponent } from 'state';
 import i18n from 'i18n/i18n';
 import { i18n as i18nInterface } from 'i18next';
