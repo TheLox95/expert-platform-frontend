@@ -43,10 +43,10 @@ const Header: WrappedComponent = ({ useGlobalState, http, requests, i18n }) => {
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
                 <Link to="/">
-                    <Button className={Classes.MINIMAL} icon="home" text={i18n.t('header-home')} />
+                    <Button id="header-home" className={Classes.MINIMAL} icon="home" text={i18n.t('header-home')} />
                 </Link>
                 <Link to="/search" >
-                    <Button className={Classes.MINIMAL} icon="document" text={i18n.t('header-search')} />
+                    <Button id="header-search" className={Classes.MINIMAL} icon="document" text={i18n.t('header-search')} />
                 </Link>
                 <SessionFactory component={'LoginButton'} />
             </NavbarGroup>

@@ -2,7 +2,6 @@ import puppeteer from 'puppeteer';
 import Axios from 'axios';
 
 beforeAll(() => {
-  console.log(`${process.env.REACT_APP_BACKEND_URL}/test`)
   return Axios(`${process.env.REACT_APP_BACKEND_URL}/test`);
 });
 

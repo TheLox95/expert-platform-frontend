@@ -34,11 +34,8 @@ describe('Login', () => {
     browser.close();
   }, 9000000);
 
-  test('cancel form OK', async () => {
-    let browser = await puppeteer.launch({
-      headless: false,
-      devtools: true
-    });
+  test('register like Expert', async () => {
+    let browser = await puppeteer.launch();
     let page = await browser.newPage();
 
     page.emulate({
@@ -70,6 +67,50 @@ describe('Login', () => {
     });
 
     expect(stringIsIncluded).toBe('Expert')
+
+    await page.waitForSelector('#header-home')
+    await page.waitForSelector('#header-dashboard')
+    await page.waitForSelector('#header-search')
+    await page.waitForSelector('#header-logout')
+
+    expect(await page.$('#header-notifications')).toBe(null)
+
+    browser.close();
+  }, 9000000);
+
+  test('register like Client', async () => {
+    let browser = await puppeteer.launch({
+      headless: false,
+      devtools: true,
+      slowMo:50
+    });
+    let page = await browser.newPage();
+
+    page.emulate({
+      viewport: {
+        width: 500,
+        height: 900
+      },
+      userAgent: ''
+    });
+
+    await page.goto('http://localhost:3000/');
+
+    await page.waitForSelector('#login-from');
+    
+    await page.click('#register-client-input');
+
+    await page.waitForSelector('#register-form');
+
+    await page.type("#username-input", 'client');
+    await page.type("#email-input", 'client@mail.com');
+    await page.type("#password-input", 'client123');
+    await page.type("#password-confirmation-input", 'client123');
+    await page.click("#submit-register-input");
+
+    await page.waitForSelector('#header-home')
+    await page.waitForSelector('#header-logout')
+    await page.waitForSelector('#header-notifications')
 
     browser.close();
   }, 9000000);
