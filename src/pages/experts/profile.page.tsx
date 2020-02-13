@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { wrapper, WrappedComponent } from "state";
 import { Tabs, Tab, Card, Classes } from "@blueprintjs/core";
@@ -7,12 +6,7 @@ import { useParams } from "react-router-dom";
 import Offerings from "./offerings"
 import Info from "./info"
 import Opinions from "./opinions"
-import { HttpInstance } from 'requests';
-import { Offering, Opinion, User } from 'models';
-
-const getUser = (id: string, http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/users/${id}` }).then(r => r.data)
-const getOfferings = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/offerings?_sort=created_at:desc` }).then(r => r.data)
-const getOpinions = (http: HttpInstance<{}>) => http({ method: 'get', url: `${process.env.REACT_APP_BACKEND_URL}/opinions` }).then(r => r.data)
+import {  User } from 'models';
 
 const Profile: WrappedComponent = ({ http, useGlobalState, i18n, requests }) => {
     const { id } = useParams();
