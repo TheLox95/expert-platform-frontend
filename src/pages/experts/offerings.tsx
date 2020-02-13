@@ -31,11 +31,12 @@ const Offerings: WrappedComponent<{ canAdd?: boolean }> = ({ useGlobalState, req
                 />
             )}
             <Callout style={{ marginBottom: '0.5rem'}}>
-                <Button fill={true} large={true} text={i18n.t('offering-create')} onClick={() => updateCreating(true)}/>
+                <Button id="offering-create-button" fill={true} large={true} text={i18n.t('offering-create')} onClick={() => updateCreating(true)}/>
             </Callout>
             {user?.offerings.map((o, idx) => {
                 return (
                     <Callout
+                        className="offering-card"
                         key={idx}
                         style={{ marginBottom: '0.5rem', display: "flex", justifyContent: 'space-between'}}
                         onMouseEnter={() => updateHovering(idx)}

@@ -24,11 +24,10 @@ const Login: WrappedComponent<{ user: User, jwt: string }> = ({ http, useGlobalS
             // Handle success.
             console.log('Well done!');
             console.log('User profile', user);
-            localStorage.setItem('user', JSON.stringify(user))
-            updateUser(user);
-
             console.log('User token', jwt);
+            localStorage.setItem('user', JSON.stringify(user))
             localStorage.setItem('token', jwt)
+            updateUser(user);
         })
         .catch(error => {
             // Handle error.

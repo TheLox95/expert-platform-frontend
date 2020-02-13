@@ -42,17 +42,17 @@ const Form: WrappedComponent<{ close: () => void }> = (props) => {
                 <h3>Create new Offering</h3>
 
                 <div className="bp3-form-group">
-                    <label className="bp3-label" htmlFor="title-input">Title</label>
+                    <label className="bp3-label" htmlFor="offering-title-input">Title</label>
                     <div className="bp3-input-group">
-                    <input type="text" className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="title-input" name='title' placeholder="Title" ref={register({ required: true })}/>
+                    <input type="text" className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id="offering-title-input" name='title' placeholder="Title" ref={register({ required: true })}/>
                     </div>
                     <div className="bp3-form-helper-text">{errors.title && 'Title is required'}</div>
                 </div>
 
                 <div className="bp3-form-group">
-                    <label className="bp3-label" htmlFor="description-input">Description</label>
+                    <label className="bp3-label" htmlFor="offering-description-input">Description</label>
                     <div className="bp3-input-group">
-                    <textarea className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'description-input'} name='description' placeholder="Description" ref={register({ required: true })}/>
+                    <textarea className={`${errors.title ? 'bp3-intent-danger': 'bp3-intent-none'} bp3-input`} id={'offering-description-input'} name='description' placeholder="Description" ref={register({ required: true })}/>
                     </div>
                     <div className="bp3-form-helper-text">{errors.description && 'Description is required'}</div>
                 </div>

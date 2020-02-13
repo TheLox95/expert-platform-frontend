@@ -22,7 +22,7 @@ const Progress: WrappedComponent<{ manager: any, file: File }> = (props) => {
     }
 
     return (
-        <Callout style={{ display: 'flex', justifyContent: 'space-between'}}>
+        <Callout className="file-upload-progress" style={{ display: 'flex', justifyContent: 'space-between'}}>
             <div style={{ flex: '1'}}>
                 <ProgressBar intent={intent} value={progress === -1 ? 100 : progress / 100} animate={progress !== 100 && progress !== -1}></ProgressBar>
                 <Text>{file.name}</Text>
